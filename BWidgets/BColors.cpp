@@ -76,7 +76,7 @@ ColorSet::ColorSet () : ColorSet ({grey, lightgrey, darkgrey}) {};
 ColorSet::ColorSet (std::vector<Color> vectorOfColors) : colors (vectorOfColors) {};
 ColorSet::~ColorSet () {};
 
-void ColorSet::addColor (State state, Color color)
+void ColorSet::addColor (State state, Color& color)
 {
 	// Filling undefined vector elements with Color invisible
 	int size = colors.size ();
