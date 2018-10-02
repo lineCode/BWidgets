@@ -130,12 +130,12 @@ public:
 	~ColorSet ();
 
 	/**
-	 * Adds a BColors::Color to the ColorSet
+	 * Adds (or overwrites) a BColors::Color to the ColorSet
 	 * @param state BColors::State of the color to be added to the set. The
 	 * 				set will be extended automatically if needed.
 	 * @param color BColors::Color to be added
 	 */
-	void addColor (State state, Color& color);
+	void addColor (State state, Color color);
 
 	/**
 	 * Removes a BColors::Color from the ColorSet

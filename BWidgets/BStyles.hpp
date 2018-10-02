@@ -103,10 +103,10 @@ public:
 	void setLine (Line line);
 
 	/**
-	 * Gets the line of a border style
+	 * Gets a pointer to the line of a border style
 	 * @return BStyles::Line
 	 */
-	Line getLine ();
+	Line* getLine ();
 
 	/**
 	 * Sets the margin of a border style

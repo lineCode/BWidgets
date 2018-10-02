@@ -30,7 +30,8 @@ typedef enum{
 	NO_BUTTON		= 0,
 	LEFT_BUTTON		= 1,
 	MIDDLE_BUTTON	= 2,
-	RIGHT_BUTTON	= 3
+	RIGHT_BUTTON	= 3,
+	NR_OF_BUTTONS	= 4
 } InputDevice;
 
 /**

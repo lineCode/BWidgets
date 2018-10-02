@@ -48,7 +48,7 @@ Border::Border (Line line, double margin, double padding, double radius) : borde
 Border::~Border () {}
 
 void Border::setLine (Line line) {borderLine = line;}
-Line Border::getLine () {return borderLine;}
+Line* Border::getLine () {return &borderLine;}
 void Border::setMargin (double margin) {borderMargin = margin;}
 double Border::getMargin () {return borderMargin;}
 void Border::setPadding (double padding) {borderPadding = padding;}
