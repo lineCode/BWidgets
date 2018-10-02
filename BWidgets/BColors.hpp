@@ -135,7 +135,7 @@ public:
 	 * 				set will be extended automatically if needed.
 	 * @param color BColors::Color to be added
 	 */
-	void addColor (State state, Color color);
+	void addColor (State state, Color& color);
 
 	/**
 	 * Removes a BColors::Color from the ColorSet
