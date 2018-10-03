@@ -46,51 +46,62 @@ class Color
 {
 public:
 	Color ();
-	Color (double red, double green, double blue, double alpha);
-	Color (uint32_t red32, uint32_t green32, uint32_t blue32, uint32_t alpha32);
-	~Color ();
+	Color (const double red, const double green, const double blue, const double alpha);
+	Color (const uint32_t red32, const uint32_t green32, const uint32_t blue32, const uint32_t alpha32);
+
+	bool operator== (const Color& that) const;
+	bool operator!= (const Color& that) const;
 
 	/**
 	 * Sets colors rgb and alpha of a BColors::Color
 	 * @param red, green, blue, alpha Relative values (0.0 .. 1.0)
 	 */
-	void setRGBA (double red, double green, double blue, double alpha);
+	void setRGBA (const double red, const double green, const double blue, const double alpha);
 
 	/**
 	 * Sets colors rgb of a BColors::Color
 	 * @param red, green, blue Relative values (0.0 .. 1.0)
 	 */
-	void setRGB (double red, double green, double blue);
+	void setRGB (const double red, const double green, const double blue);
 
 	/**
 	 * Sets alpha value of a BColors::Color
 	 * @param alpha Relative value (0.0 .. 1.0)
 	 */
-	void setAlpha (double alpha);
+	void setAlpha (const double alpha);
 
 	/**
 	 * Gets red value of a BColors::Color
 	 * @return Relative red value (0.0 .. 1.0)
 	 */
-	double getRed ();
+	double getRed () const;
 
 	/**
 	 * Gets green value of a BColors::Color
 	 * @return Relative green value (0.0 .. 1.0)
 	 */
-	double getGreen ();
+	double getGreen () const;
 
 	/**
 	 * Gets blue value of a BColors::Color
 	 * @return Relative blue value (0.0 .. 1.0)
 	 */
-	double getBlue ();
+	double getBlue () const;
 
 	/**
 	 * Gets alpha value of a BColors::Color
 	 * @return Relative alpha value (0.0 .. 1.0)
 	 */
-	double getAlpha ();
+	double getAlpha () const;
+
+	/**
+	 * Compares the color of this object with the color of the given object by
+	 * comparison of all RGB and alpha values.
+	 * @param that Color to compare with
+	 * @return 0, if both colors are equal
+	 * 		   1, if the two colors are not equal
+	 */
+	int compare (const Color& that) const;
 
 private:
 	double red_, green_, blue_, alpha_;
@@ -126,8 +137,7 @@ class ColorSet
 {
 public:
 	ColorSet ();
-	ColorSet (std::vector<Color> vectorOfColors);
-	~ColorSet ();
+	ColorSet (const std::vector<Color> vectorOfColors);
 
 	/**
 	 * Adds (or overwrites) a BColors::Color to the ColorSet
@@ -135,24 +145,27 @@ public:
 	 * 				set will be extended automatically if needed.
 	 * @param color BColors::Color to be added
 	 */
-	void addColor (State state, Color color);
+	void addColor (const State state, const Color& color);
 
 	/**
 	 * Removes a BColors::Color from the ColorSet
 	 * @param state BColors::State of the color to be removed from the set. The
 	 * 				set will be shrinked automatically if needed.
 	 */
-	void removeColor (State state);
+	void removeColor (const State state);
 
 	/**
 	 * Gets a (pointer to) BColors::Color from the ColorSet
 	 * @param state BColors::State of the color to be returned.
-	 * @return Pointer to BColors::Color of the respective state
+	 * @return Pointer to BColors::Color of the respective state or pointer to
+	 * 		   a copy of BColors::invisible if the states color is not within
+	 * 		   the ColorSet.
 	 */
-	const Color* getColor (State state);
+	Color* getColor (const State state);
 
 private:
 	std::vector<Color> colors;
+	Color noColor = invisible;
 };
 /*
  * End of class BColors::ColorSet

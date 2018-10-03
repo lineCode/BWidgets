@@ -30,7 +30,7 @@ namespace BValues {
  * @param format Number format, see printf.
  * @return Converted value as a std:string.
  */
-std::string toBString (std::string format, double value);
+std::string toBString (const std::string& format, const double value);
 
 }
 

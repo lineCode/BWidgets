@@ -19,7 +19,7 @@
 
 namespace BValues {
 
-std::string toBString (std::string format, double value)
+std::string toBString (const std::string& format, const double value)
 {
 	char c[64];
 	snprintf (c, 64, format.c_str (), value);

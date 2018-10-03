@@ -30,15 +30,17 @@ namespace BColors
 
 Color::Color () : Color (0.0, 0.0, 0.0, 0.0) {};
 
-Color::Color (double red, double green, double blue, double alpha) :
+Color::Color (const double red, const double green, const double blue, const double alpha) :
 		red_ (LIMIT (red, 0.0, 1.0)), green_ (LIMIT (green, 0.0, 1.0)), blue_ (LIMIT (blue, 0.0, 1.0)), alpha_ (LIMIT (alpha, 0.0, 1.0)) {}
 
-Color::Color (uint32_t red32, uint32_t green32, uint32_t blue32, uint32_t alpha32) :
+Color::Color (const uint32_t red32, const uint32_t green32, const uint32_t blue32, const uint32_t alpha32) :
 		red_ (red32 / 0xFFFF), green_ (green32 / 0xFFFF), blue_ (blue32 / 0xFFFF), alpha_ (alpha32 / 0xFFFF) {}
 
-Color:: ~Color () {}
+bool Color::operator== (const Color& that) const {return (0 == compare (that));}
 
-void Color::setRGBA (double red, double green, double blue, double alpha)
+bool Color::operator!= (const Color& that) const {return !(0 == compare (that));}
+
+void Color::setRGBA (const double red, const double green, const double blue, const double alpha)
 {
 
 	red_ = LIMIT (red, 0.0, 1.0);
@@ -47,22 +49,27 @@ void Color::setRGBA (double red, double green, double blue, double alpha)
 	alpha_ = LIMIT (alpha, 0.0, 1.0);
 }
 
-void Color::setRGB (double red, double green, double blue)
+void Color::setRGB (const double red, const double green, const double blue)
 {
 	red_ = LIMIT (red, 0.0, 1.0);
 	green_ = LIMIT (green, 0.0, 1.0);
 	blue_ = LIMIT (blue, 0.0, 1.0);
 }
 
-void Color::setAlpha (double alpha)
+void Color::setAlpha (const double alpha)
 {
 	alpha_ = LIMIT (alpha, 0.0, 1.0);
 }
 
-double Color::getRed() {return red_;}
-double Color::getGreen() {return green_;}
-double Color::getBlue() {return blue_;}
-double Color::getAlpha() {return alpha_;}
+double Color::getRed() const {return red_;}
+double Color::getGreen() const {return green_;}
+double Color::getBlue() const {return blue_;}
+double Color::getAlpha() const {return alpha_;}
+
+int Color::compare (const Color& that) const
+{
+	return ((red_ == that.red_) && (green_ == that.green_) && (blue_ == that.blue_) && (alpha_ == that.alpha_) ? 0 : 1);
+}
 
 /*
  * End of class BColors::Color
@@ -73,10 +80,9 @@ double Color::getAlpha() {return alpha_;}
  *****************************************************************************/
 
 ColorSet::ColorSet () : ColorSet ({grey, lightgrey, darkgrey}) {};
-ColorSet::ColorSet (std::vector<Color> vectorOfColors) : colors (vectorOfColors) {};
-ColorSet::~ColorSet () {};
+ColorSet::ColorSet (const std::vector<Color> vectorOfColors) : colors (vectorOfColors) {};
 
-void ColorSet::addColor (State state, Color color)
+void ColorSet::addColor (const State state, const Color& color)
 {
 	// Filling undefined vector elements with Color invisible
 	int size = colors.size ();
@@ -85,7 +91,7 @@ void ColorSet::addColor (State state, Color color)
 	colors[state] = color;
 }
 
-void ColorSet::removeColor (State state)
+void ColorSet::removeColor (const State state)
 {
 	if (state < colors.size ())
 	{
@@ -95,13 +101,13 @@ void ColorSet::removeColor (State state)
 	// TODO shrink vector colors if last element is removed
 }
 
-const Color* ColorSet::getColor (State state)
+Color* ColorSet::getColor (const State state)
 {
 	if (state < colors.size ())
 	{
 		return &colors[state];
 	}
-	else return &invisible;
+	else return &noColor;
 }
 
 /*

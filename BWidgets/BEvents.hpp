@@ -60,8 +60,7 @@ class Event
 {
 public:
 	Event ();
-	Event (void* widget, EventType type);
-	~Event ();
+	Event (void* widget, const EventType type);
 
 	/**
 	 * Gets a pointer to the widget which caused the event.
@@ -73,7 +72,7 @@ public:
 	 * Gets the type of the event
 	 * @return Event type
 	 */
-	EventType getEventType ();
+	EventType getEventType () const;
 
 protected:
 	void* eventWidget;
@@ -97,56 +96,55 @@ class ExposeEvent : public Event
 {
 public:
 	ExposeEvent ();
-	ExposeEvent (void* widget, double x, double y, double width, double heigth);
-	~ExposeEvent ();
+	ExposeEvent (void* widget, const double x, const double y, const double width, const double heigth);
 
 	/**
 	 * Redefines the x coordinate of the output region for the expose event
 	 * @param x X coordinate relative to the widgets origin
 	 */
-	void setX (double x);
+	void setX (const double x);
 
 	/**
 	 * Gets the x coordinate of the output region for the expose event
 	 * @return X coordinate relative to the widgets origin
 	 */
-	double getX ();
+	double getX () const;
 
 	/**
 	 * Redefines the y coordinate of the output region for the expose event
 	 * @param y Y coordinate relative to the widgets origin
 	 */
-	void setY (double y);
+	void setY (const double y);
 
 	/**
 	 * Gets the y coordinate of the output region for the expose event
 	 * @return Y coordinate relative to the widgets origin
 	 */
-	double getY ();
+	double getY () const;
 
 	/**
 	 * Redefines the width of the output region for the expose event
 	 * @param width Width of the output region
 	 */
-	void setWidth (double width);
+	void setWidth (const double width);
 
 	/**
 	 * Gets the width of the output region for the expose event
 	 * @return Width of the output region
 	 */
-	double getWidth ();
+	double getWidth () const;
 
 	/**
 	 * Redefines the height of the output region for the expose event
 	 * @param height Height of the output region
 	 */
-	void setHeight (double height);
+	void setHeight (const double height);
 
 	/**
 	 * Gets the height of the output region for the expose event
 	 * @return Height of the output region
 	 */
-	double getHeight ();
+	double getHeight () const;
 
 protected:
 	double exposeX0;
@@ -173,44 +171,43 @@ class PointerEvent : public Event
 {
 public:
 	PointerEvent ();
-	PointerEvent (void* widget, EventType type, double x, double y, InputDevice button);
-	~PointerEvent ();
+	PointerEvent (void* widget, const EventType type, const double x, const double y, const InputDevice button);
 
 	/**
 	 * Redefines the x coordinate of the pointer event
 	 * @param x X coordinate relative to the widgets origin
 	 */
-	void setX (double x);
+	void setX (const double x);
 
 	/**
 	 * Gets the x coordinate of the pointer event
 	 * @return X coordinate relative to the widgets origin
 	 */
-	double getX ();
+	double getX () const;
 
 	/**
 	 * Redefines the y coordinate of the pointer event
 	 * @param y y coordinate relative to the widgets origin
 	 */
-	void setY (double y);
+	void setY (const double y);
 
 	/**
 	 * Gets the y coordinate of the pointer event
 	 * @return Y coordinate relative to the widgets origin
 	 */
-	double getY ();
+	double getY () const;
 
 	/**
 	 * Redefines the button pressed of the pointer event
 	 * @param button Button pressed
 	 */
-	void setButton (InputDevice button);
+	void setButton (const InputDevice button);
 
 	/**
 	 * Gets the button pressed of the pointer event
 	 * @return Button pressed
 	 */
-	InputDevice getButton ();
+	InputDevice getButton () const;
 
 protected:
 	double xpos;
@@ -236,21 +233,20 @@ class ValueChangedEvent : public Event
 {
 public:
 	ValueChangedEvent ();
-	ValueChangedEvent (void* widget, double val);
-	~ValueChangedEvent ();
+	ValueChangedEvent (void* widget, const double val);
 
 	/**
 	 * Redefines the value exposed by the event. This method doesn't change the
 	 * value within a widget!
 	 * @param val New value
 	 */
-	void setValue (double val);
+	void setValue (const double val);
 
 	/**
 	 * Gets the value exposed by the event
 	 * @return Value of the event
 	 */
-	double getValue ();
+	double getValue () const;
 
 protected:
 	double value;

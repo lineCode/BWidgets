@@ -41,32 +41,31 @@ class Line
 {
 public:
 	Line ();
-	Line (BColors::Color color, double width);
-	~Line ();
+	Line (const BColors::Color& color, const double width);
 
 	/**
 	 * Sets color of the line style
 	 * @param color BColors::Color
 	 */
-	void setColor (BColors::Color color);
+	void setColor (const BColors::Color& color);
 
 	/**
 	 * Gets (a pointer to the) color of the line style
 	 * @return Returns BColors::Color.
 	 */
-	const BColors::Color* getColor ();
+	BColors::Color* getColor ();
 
 	/**
 	 * Sets width of the line
 	 * @param width Width of the line in pt.
 	 */
-	void setWidth (double width);
+	void setWidth (const double width);
 
 	/**
 	 * Gets width of the line
 	 * @return Width of the line in pt.
 	 */
-	double getWidth ();
+	double getWidth () const;
 
 private:
 	BColors::Color lineColor;
@@ -91,16 +90,15 @@ class Border
 {
 public:
 	Border ();
-	Border (Line line);
-	Border (Line line, double margin, double padding);
-	Border (Line line, double margin, double padding, double radius);
-	~Border ();
+	Border (const Line& line);
+	Border (const Line& line, const double margin, const double padding);
+	Border (const Line& line, const double margin, const double padding, const double radius);
 
 	/**
 	 * Sets the line of a border style
 	 * @param line BStyles::Line
 	 */
-	void setLine (Line line);
+	void setLine (const Line& line);
 
 	/**
 	 * Gets a pointer to the line of a border style
@@ -113,39 +111,39 @@ public:
 	 * @param margin Distance from border line to the outer limits of the
 	 * 				 border.
 	 */
-	void setMargin (double margin);
+	void setMargin (const double margin);
 
 	/**
 	 * Gets the margin of a border style
 	 * @return Distance from border line to the outer limits of the border.
 	 */
-	double getMargin ();
+	double getMargin () const;
 
 	/**
 	 * Sets the padding of a border style
 	 * @param padding Distance from border line to the inner limits of the
 	 * 				  border.
 	 */
-	void setPadding (double padding);
+	void setPadding (const double padding);
 
 	/**
 	 * Gets the padding of a border style
 	 * @return Distance from border line to the inner limits of the border.
 	 */
-	double getPadding ();
+	double getPadding () const;
 
 	/**
 	 * Sets the radius of the corners of a border style
 	 * @param radius Radius of the corners. If (radius != 0), the corners will
 	 * 				 be rounded.
 	 */
-	void setRadius (double radius);
+	void setRadius (const double radius);
 
 	/**
 	 * Gets the radius of the corners of a border style
 	 * @param radius Radius of the corners.
 	 */
-	double getRadius ();
+	double getRadius () const;
 
 protected:
 	Line borderLine;
@@ -173,8 +171,8 @@ class Fill
 {
 public:
 	Fill ();
-	Fill (BColors::Color color);
-	Fill (std::string filename);
+	Fill (const BColors::Color& color);
+	Fill (const std::string& filename);
 	Fill (const Fill& that);
 	Fill& operator= (const Fill& that);
 	~Fill ();
@@ -183,20 +181,20 @@ public:
 	 * Sets the color of a fill style
 	 * @param color BColors::Color
 	 */
-	void setColor (BColors::Color color);
+	void setColor (const BColors::Color& color);
 
 	/**
 	 * Gets (a pointer to) the color of a fill style
 	 * @return BColors::Color
 	 */
-	const BColors::Color* getColor ();
+	BColors::Color* getColor ();
 
 	/**
 	 * Loads a PNG file into a Cairo image surface and uses it for the fill
 	 * style.
 	 * @param filename File name of the PNG file
 	 */
-	void loadFillFromFile (std::string filename);
+	void loadFillFromFile (const std::string& filename);
 
 	/**
 	 * Copies a Cairo image surface and uses it for the fill style.
@@ -242,56 +240,55 @@ class Font
 {
 public:
 	Font ();
-	Font (std::string family, cairo_font_slant_t slant, cairo_font_weight_t weight, double size);
-	~Font ();
+	Font (const std::string& family, const cairo_font_slant_t slant, const cairo_font_weight_t weight, const double size);
 
 	/**
 	 * Sets font family of the font style
 	 * @param family Cairo font family name (as std::string)
 	 */
-	void setFontFamily (std::string family);
+	void setFontFamily (const std::string& family);
 
 	/**
 	 * Gets font family of the font style
 	 * @return Cairo font family name (as std::string)
 	 */
-	std::string getFontFamily ();
+	std::string getFontFamily () const;
 
 	/**
 	 * Sets font slant of the font style
 	 * @param slant Cairo font slant
 	 */
-	void setFontSlant (cairo_font_slant_t slant);
+	void setFontSlant (const cairo_font_slant_t slant);
 
 	/**
 	 * Gets font slant of the font style
 	 * @return Cairo font slant
 	 */
-	cairo_font_slant_t getFontSlant ();
+	cairo_font_slant_t getFontSlant () const;
 
 	/**
 	 * Sets font weight of the font style
 	 * @param weight Cairo font weight
 	 */
-	void setFontWeight (cairo_font_weight_t weight);
+	void setFontWeight (const cairo_font_weight_t weight);
 
 	/**
 	 * Gets font weight of the font style
 	 * @return Cairo font weight
 	 */
-	cairo_font_weight_t getFontWeight ();
+	cairo_font_weight_t getFontWeight () const;
 
 	/**
 	 * Sets font size of the font style
 	 * @param size Font size as used by Cairo
 	 */
-	void setFontSize (double size);
+	void setFontSize (const double size);
 
 	/**
 	 * Gets font size of the font style
 	 * @return Font size as used by Cairo
 	 */
-	double getFontSize ();
+	double getFontSize () const;
 
 	/**
 	 * Gets the output dimensions of a text
@@ -300,7 +297,7 @@ public:
 	 * @param text Text to calculate output dimensions for.
 	 * @return Output dimensions as Cairo text extents.
 	 */
-	cairo_text_extents_t getTextExtents (cairo_t* cr, std::string text);
+	cairo_text_extents_t getTextExtents (cairo_t* cr, const std::string& text) const;
 
 private:
 	std::string fontFamily;
@@ -351,15 +348,14 @@ typedef struct {
 class StyleSet {
 public:
 	StyleSet ();
-	StyleSet (std::string name, std::vector<Style> styles);
-	~StyleSet ();
+	StyleSet (const std::string& name, const std::vector<Style>& styles);
 
 	/**
 	 * Adds a style to (or overwrites an existing of) the BStyles::StyleSet.
 	 * @param styleName Name of the style to be added or overwritten.
 	 * @param ptr Pointer to the style element.
 	 */
-	void addStyle (std::string styleName, void* ptr);
+	void addStyle (const std::string& styleName, void* ptr);
 
 	//TODO void addStyle (Style& style);
 
@@ -369,26 +365,26 @@ public:
 	 * 					BStyles::StyleSet.
 	 * TODO throws style doesn't exist
 	 */
-	void removeStyle (std::string styleName);
+	void removeStyle (const std::string& styleName);
 
 	/**
 	 * Gets a pointer to an existing style from the BStyles::StyleSet.
 	 * @param styleName Name of the style.
 	 * TODO throws style doesn't exist
 	 */
-	void* getStyle (std::string styleName);
+	void* getStyle (const std::string& styleName);
 
 	/**
 	 * Sets the name of the BStyles::StyleSet
 	 * @param name Name of the BStyles::StyleSet.
 	 */
-	void setName (std::string name);
+	void setName (const std::string& name);
 
 	/**
 	 * Gets the name of the BStyles::StyleSet
 	 * @return Name of the BStyles::StyleSet
 	 */
-	std::string getName ();
+	std::string getName () const;
 
 protected:
 	std::string stylesetName;
@@ -409,8 +405,7 @@ class Theme
 {
 public:
 	Theme ();
-	Theme (std::vector<StyleSet> theme);
-	~Theme ();
+	Theme (const std::vector<StyleSet>& theme);
 
 	/**
 	 * Adds (or overwrites an existing) style to an BStyles::StyleSet
@@ -420,7 +415,7 @@ public:
 	 * @param styleName Name of the BStyles::Style
 	 * @param ptr Pointer to the style element
 	 */
-	void addStyle (std::string setName, std::string styleName, void* ptr);
+	void addStyle (const std::string& setName, const std::string& styleName, void* ptr);
 
 	//TODO void addStyle (Style style);
 	//TODO void addStyleSet (StyleSet styleSet);
@@ -432,7 +427,7 @@ public:
 	 * @param styleName Name of the style to be removed.
 	 * TODO throws style doesn't exist
 	 */
-	void removeStyle (std::string setName, std::string styleName);
+	void removeStyle (const std::string& setName, const std::string& styleName);
 
 	/**
 	 * Gets an existing style.
@@ -440,7 +435,7 @@ public:
 	 * @param styleName Name of the style to be removed.
 	 * TODO throws style doesn't exist
 	 */
-	void* getStyle (std::string setName, std::string styleName);
+	void* getStyle (const std::string& setName, const std::string& styleName);
 
 protected:
 	std::vector<StyleSet> stylesetVector;

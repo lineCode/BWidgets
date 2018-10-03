@@ -25,12 +25,11 @@ namespace BStyles
  *****************************************************************************/
 
 Line::Line () : Line (BColors::invisible, 0.0) {}
-Line::Line (BColors::Color color, double width) : lineColor (color), lineWidth (width) {}
-Line::~Line () {}
-void Line::setColor (BColors::Color color) {lineColor = color;}
-const BColors::Color* Line::getColor () {return &lineColor;}
-void Line::setWidth (double width) {lineWidth = width;}
-double Line::getWidth () {return lineWidth;}
+Line::Line (const BColors::Color& color, const double width) : lineColor (color), lineWidth (width) {}
+void Line::setColor (const BColors::Color& color) {lineColor = color;}
+BColors::Color* Line::getColor () {return &lineColor;}
+void Line::setWidth (const double width) {lineWidth = width;}
+double Line::getWidth () const {return lineWidth;}
 
 /*
  * End of class BWidgets::Line
@@ -42,19 +41,19 @@ double Line::getWidth () {return lineWidth;}
  *****************************************************************************/
 
 Border::Border () : Border (noLine, 0.0, 0.0, 0.0) {}
-Border::Border (Line line) : Border (line, 0.0, 0.0, 0.0) {}
-Border::Border (Line line, double margin, double padding) : Border (line, margin, padding, 0.0) {}
-Border::Border (Line line, double margin, double padding, double radius) : borderLine (line), borderMargin (margin), borderPadding (padding), borderRadius (radius) {}
-Border::~Border () {}
+Border::Border (const Line& line) : Border (line, 0.0, 0.0, 0.0) {}
+Border::Border (const Line& line, const double margin, const double padding) : Border (line, margin, padding, 0.0) {}
+Border::Border (const Line& line, const double margin, const double padding, const double radius) :
+		borderLine (line), borderMargin (margin), borderPadding (padding), borderRadius (radius) {}
 
-void Border::setLine (Line line) {borderLine = line;}
+void Border::setLine (const Line& line) {borderLine = line;}
 Line* Border::getLine () {return &borderLine;}
-void Border::setMargin (double margin) {borderMargin = margin;}
-double Border::getMargin () {return borderMargin;}
-void Border::setPadding (double padding) {borderPadding = padding;}
-double Border::getPadding () {return borderPadding;}
-void Border::setRadius (double radius) {borderRadius = radius;}
-double Border::getRadius () {return borderRadius;}
+void Border::setMargin (const double margin) {borderMargin = margin;}
+double Border::getMargin () const {return borderMargin;}
+void Border::setPadding (const double padding) {borderPadding = padding;}
+double Border::getPadding () const {return borderPadding;}
+void Border::setRadius (const double radius) {borderRadius = radius;}
+double Border::getRadius () const {return borderRadius;}
 
 /*
  * End of class BWidgets::Border
@@ -66,8 +65,8 @@ double Border::getRadius () {return borderRadius;}
  *****************************************************************************/
 
 Fill::Fill () : fillColor (BColors::invisible), fillSurface (nullptr) {}
-Fill::Fill (BColors::Color color) : fillColor (color), fillSurface (nullptr) {}
-Fill::Fill (std::string filename) : fillColor (BColors::invisible), fillSurface (nullptr)
+Fill::Fill (const BColors::Color& color) : fillColor (color), fillSurface (nullptr) {}
+Fill::Fill (const std::string& filename) : fillColor (BColors::invisible), fillSurface (nullptr)
 {
 	loadFillFromFile (filename);
 }
@@ -96,11 +95,11 @@ Fill::~Fill ()
 	if (fillSurface) cairo_surface_destroy (fillSurface);
 }
 
-void Fill::setColor (BColors::Color color) {fillColor = color;}
+void Fill::setColor (const BColors::Color& color) {fillColor = color;}
 
-const BColors::Color* Fill::getColor () {return &fillColor;}
+BColors::Color* Fill::getColor () {return &fillColor;}
 
-void Fill::loadFillFromFile (std::string filename)
+void Fill::loadFillFromFile (const std::string& filename)
 {
 	if (fillSurface) cairo_surface_destroy (fillSurface);
 	fillSurface = cairo_image_surface_create_from_png (filename.c_str());
@@ -124,20 +123,19 @@ cairo_surface_t* Fill::getCairoSurface () {return fillSurface;}
  *****************************************************************************/
 
 Font::Font () : Font ("Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0) {}
-Font::Font (std::string family, cairo_font_slant_t slant, cairo_font_weight_t weight, double size) :
+Font::Font (const std::string& family, const cairo_font_slant_t slant, const cairo_font_weight_t weight, const double size) :
 		fontFamily (family), fontSlant (slant), fontWeight (weight), fontSize (size) {}
-Font::~Font () {}
 
-void Font::setFontFamily (std::string family) {fontFamily = family;}
-std::string Font::getFontFamily () {return fontFamily;}
-void Font::setFontSlant (cairo_font_slant_t slant) {fontSlant = slant;}
-cairo_font_slant_t Font::getFontSlant () {return fontSlant;}
-void Font::setFontWeight (cairo_font_weight_t weight) {fontWeight = weight;}
-cairo_font_weight_t Font::getFontWeight () {return fontWeight;}
-void Font::setFontSize (double size) {fontSize = size;}
-double Font::getFontSize () {return fontSize;}
+void Font::setFontFamily (const std::string& family) {fontFamily = family;}
+std::string Font::getFontFamily () const {return fontFamily;}
+void Font::setFontSlant (const cairo_font_slant_t slant) {fontSlant = slant;}
+cairo_font_slant_t Font::getFontSlant () const {return fontSlant;}
+void Font::setFontWeight (const cairo_font_weight_t weight) {fontWeight = weight;}
+cairo_font_weight_t Font::getFontWeight () const {return fontWeight;}
+void Font::setFontSize (const double size) {fontSize = size;}
+double Font::getFontSize () const {return fontSize;}
 
-cairo_text_extents_t Font::getTextExtents (cairo_t* cr, std::string text)
+cairo_text_extents_t Font::getTextExtents (cairo_t* cr, const std::string& text) const
 {
 	if (cr)
 	{
@@ -164,10 +162,9 @@ cairo_text_extents_t Font::getTextExtents (cairo_t* cr, std::string text)
  *****************************************************************************/
 
 StyleSet::StyleSet () {}
-StyleSet::StyleSet (std::string name, std::vector<Style> styles) : stylesetName (name), styleVector (styles) {}
-StyleSet::~StyleSet() {}
+StyleSet::StyleSet (const std::string& name, const std::vector<Style>& styles) : stylesetName (name), styleVector (styles) {}
 
-void StyleSet::addStyle (std::string styleName, void* ptr)
+void StyleSet::addStyle (const std::string& styleName, void* ptr)
 {
 	for (Style style : styleVector)
 	{
@@ -187,7 +184,7 @@ void StyleSet::addStyle (std::string styleName, void* ptr)
 	return;
 }
 
-void StyleSet::removeStyle (std::string styleName)
+void StyleSet::removeStyle (const std::string& styleName)
 {
 	for (std::vector<Style>::iterator it = styleVector.begin (); it !=styleVector.end (); ++it)
 	{
@@ -205,7 +202,7 @@ void StyleSet::removeStyle (std::string styleName)
 	return;
 }
 
-void* StyleSet::getStyle (std::string styleName)
+void* StyleSet::getStyle (const std::string& styleName)
 {
 	void* ptr = nullptr;
 	for (Style style : styleVector)
@@ -227,8 +224,8 @@ void* StyleSet::getStyle (std::string styleName)
 	return ptr;
 }
 
-void StyleSet::setName (std::string name) {stylesetName = name;}
-std::string StyleSet::getName () {return stylesetName;}
+void StyleSet::setName (const std::string& name) {stylesetName = name;}
+std::string StyleSet::getName () const {return stylesetName;}
 
 /*
  * End of class BWidgets::StyleSet
@@ -239,10 +236,9 @@ std::string StyleSet::getName () {return stylesetName;}
  *****************************************************************************/
 
 Theme::Theme () {};
-Theme::Theme (std::vector<StyleSet> theme): stylesetVector (theme) {};
-Theme::~Theme () {};
+Theme::Theme (const std::vector<StyleSet>& theme): stylesetVector (theme) {};
 
-void Theme::addStyle (std::string setName, std::string styleName, void* ptr)
+void Theme::addStyle (const std::string& setName, const std::string& styleName, void* ptr)
 {
 	for (StyleSet styleSet : stylesetVector)
 	{
@@ -258,7 +254,7 @@ void Theme::addStyle (std::string setName, std::string styleName, void* ptr)
 	stylesetVector.push_back (newSet);
 }
 
-void Theme::removeStyle (std::string setName, std::string styleName)
+void Theme::removeStyle (const std::string& setName, const std::string& styleName)
 {
 	for (StyleSet styleSet : stylesetVector)
 	{
@@ -275,7 +271,7 @@ void Theme::removeStyle (std::string setName, std::string styleName)
 	return;
 }
 
-void* Theme::getStyle (std::string setName, std::string styleName)
+void* Theme::getStyle (const std::string& setName, const std::string& styleName)
 {
 	for (StyleSet styleSet : stylesetVector)
 	{

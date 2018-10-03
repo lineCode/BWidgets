@@ -23,11 +23,10 @@ namespace BEvents
  * Class BEvents::Event
  *****************************************************************************/
 
-Event:: Event () : Event ((void*) nullptr, NO_EVENT) {}
-Event::Event (void* widget, EventType type) : eventWidget (widget), eventType (type) {}
-Event::~Event () {}
+Event::Event () : Event ((void*) nullptr, NO_EVENT) {}
+Event::Event (void* widget, const EventType type) : eventWidget (widget), eventType (type) {}
 void* Event::getWidget () {return eventWidget;}
-EventType Event::getEventType () {return eventType;}
+EventType Event::getEventType () const {return eventType;}
 
 /*
  * End of class BEvents::Event
@@ -39,17 +38,16 @@ EventType Event::getEventType () {return eventType;}
  *****************************************************************************/
 
 ExposeEvent::ExposeEvent () : ExposeEvent ((void*) nullptr, 0, 0, 0, 0) {}
-ExposeEvent::ExposeEvent (void* widget, double x, double y, double width, double height) :
+ExposeEvent::ExposeEvent (void* widget, const double x, const double y, const double width, const double height) :
 		Event (widget, EXPOSE_EVENT), exposeX0 (x), exposeY0 (y), exposeHeight (height), exposeWidth (width) {}
-ExposeEvent::~ExposeEvent () {}
-void ExposeEvent::setX (double x) {exposeX0 = x;}
-double ExposeEvent::getX () {return exposeX0;}
-void ExposeEvent::setY (double y) {exposeY0 = y;}
-double ExposeEvent::getY () {return exposeY0;}
-void ExposeEvent::setWidth (double width) {exposeWidth = width;}
-double ExposeEvent::getWidth () {return exposeWidth;}
-void ExposeEvent::setHeight (double height) {exposeHeight = height;}
-double ExposeEvent::getHeight () {return exposeHeight;}
+void ExposeEvent::setX (const double x) {exposeX0 = x;}
+double ExposeEvent::getX () const {return exposeX0;}
+void ExposeEvent::setY (const double y) {exposeY0 = y;}
+double ExposeEvent::getY () const {return exposeY0;}
+void ExposeEvent::setWidth (const double width) {exposeWidth = width;}
+double ExposeEvent::getWidth () const {return exposeWidth;}
+void ExposeEvent::setHeight (const double height) {exposeHeight = height;}
+double ExposeEvent::getHeight () const {return exposeHeight;}
 
 /*
  * End of class BEvents::ExposeEvent
@@ -61,15 +59,14 @@ double ExposeEvent::getHeight () {return exposeHeight;}
  *****************************************************************************/
 
 PointerEvent::PointerEvent () : PointerEvent ((void*) nullptr, NO_EVENT, 0, 0, NO_BUTTON) {}
-PointerEvent::PointerEvent (void* widget, EventType type, double x, double y, InputDevice button) :
+PointerEvent::PointerEvent (void* widget, const EventType type, const double x, const double y, const InputDevice button) :
 		Event (widget, type), xpos (x), ypos (y), buttonNr (button) {}
-PointerEvent::~PointerEvent () {}
-void PointerEvent::setX (double x) {xpos = x;}
-double PointerEvent::getX () {return xpos;}
-void PointerEvent::setY (double y) {ypos = y;}
-double PointerEvent::getY () {return ypos;}
-void PointerEvent::setButton (InputDevice button) {buttonNr = button;}
-InputDevice PointerEvent::getButton () {return buttonNr;}
+void PointerEvent::setX (const double x) {xpos = x;}
+double PointerEvent::getX () const {return xpos;}
+void PointerEvent::setY (const double y) {ypos = y;}
+double PointerEvent::getY () const {return ypos;}
+void PointerEvent::setButton (const InputDevice button) {buttonNr = button;}
+InputDevice PointerEvent::getButton () const {return buttonNr;}
 
 /*
  * End of class BEvents::PointerEvent
@@ -81,10 +78,9 @@ InputDevice PointerEvent::getButton () {return buttonNr;}
  *****************************************************************************/
 
 ValueChangedEvent::ValueChangedEvent () : ValueChangedEvent ((void*) nullptr, 0.0) {}
-ValueChangedEvent::ValueChangedEvent (void* widget, double val) : Event (widget, VALUE_CHANGED_EVENT), value (val) {}
-ValueChangedEvent::~ValueChangedEvent () {}
-void ValueChangedEvent::setValue (double val) {value = val;}
-double ValueChangedEvent::getValue () {return value;}
+ValueChangedEvent::ValueChangedEvent (void* widget, const double val) : Event (widget, VALUE_CHANGED_EVENT), value (val) {}
+void ValueChangedEvent::setValue (const double val) {value = val;}
+double ValueChangedEvent::getValue () const {return value;}
 
 /*
  * End of class BEvents::ValueChangedEvent
