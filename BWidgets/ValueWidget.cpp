@@ -4,12 +4,12 @@ namespace BWidgets
 {
 ValueWidget::ValueWidget () : ValueWidget (0, 0, 200, 200, "ValueWidget", 0.0) {}
 
-ValueWidget::ValueWidget (double  x, double y, double width, double height, std::string name, double value) :
+ValueWidget::ValueWidget (const double  x, const double y, const double width, const double height, const std::string& name, const double value) :
 		Widget (x, y, width, height, name), value (value) {}
 
 ValueWidget::~ValueWidget () {}
 
-void ValueWidget::setValue (double val)
+void ValueWidget::setValue (const double val)
 {
 	if (val != value)
 	{
@@ -20,7 +20,7 @@ void ValueWidget::setValue (double val)
 	}
 }
 
-double ValueWidget::getValue () {return value;}
+double ValueWidget::getValue () const {return value;}
 
 void ValueWidget::onValueChanged (BEvents::ValueChangedEvent* event)
 {

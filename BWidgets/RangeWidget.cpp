@@ -8,7 +8,8 @@ namespace BWidgets
 {
 RangeWidget::RangeWidget () : RangeWidget (0.0, 0.0, 200.0, 200.0, "RangeWidget", 0.0, 0.0, 100.0, 0.0) {}
 
-RangeWidget::RangeWidget (double  x, double y, double width, double height, std::string name, double value, double min, double max, double step) :
+RangeWidget::RangeWidget (const double  x, const double y, const double width, const double height, const std::string& name,
+						  const double value, const double min, const double max, const double step) :
 		ValueWidget (x, y, width, height, name, value), rangeMin (min <= max ? min : max),
 		rangeMax (max), rangeStep (step)
 {
@@ -17,7 +18,7 @@ RangeWidget::RangeWidget (double  x, double y, double width, double height, std:
 
 RangeWidget::~RangeWidget () {}
 
-void RangeWidget::setValue (double val)
+void RangeWidget::setValue (const double val)
 {
 	double valRounded = val;
 	if ((rangeStep != 0.0) && (rangeMax >= rangeMin))
@@ -28,7 +29,7 @@ void RangeWidget::setValue (double val)
 	ValueWidget::setValue (valRounded);
 }
 
-void RangeWidget::setMin (double min)
+void RangeWidget::setMin (const double min)
 {
 	double newMin = (min <= rangeMax ? min: rangeMax);
 	if (rangeMin != newMin)
@@ -39,9 +40,9 @@ void RangeWidget::setMin (double min)
 	}
 }
 
-double RangeWidget::getMin () {return rangeMin;}
+double RangeWidget::getMin () const {return rangeMin;}
 
-void RangeWidget::setMax (double max)
+void RangeWidget::setMax (const double max)
 {
 	double newMax = (max >= rangeMin ? max: rangeMin);
 	if (rangeMax != newMax)
@@ -52,11 +53,11 @@ void RangeWidget::setMax (double max)
 	}
 }
 
-double RangeWidget::getMax () {return rangeMax;}
+double RangeWidget::getMax () const {return rangeMax;}
 
-void RangeWidget::setStep (double step) {rangeStep = step;}
+void RangeWidget::setStep (const double step) {rangeStep = step;}
 
-double RangeWidget::getStep () {return rangeStep;}
+double RangeWidget::getStep () const {return rangeStep;}
 
 
 }

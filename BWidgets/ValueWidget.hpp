@@ -15,7 +15,7 @@ class ValueWidget : public Widget
 {
 public:
 	ValueWidget ();
-	ValueWidget (double  x, double y, double width, double height, std::string name, double value);
+	ValueWidget (const double x, const double y, const double width, const double height, const std::string& name, const double value);
 	~ValueWidget ();
 
 	/**
@@ -23,13 +23,13 @@ public:
 	 * visible) an expose event.
 	 * @param val Value
 	 */
-	virtual void setValue (double val);
+	virtual void setValue (const double val);
 
 	/**
 	 * Gets the value of the widget.
 	 * @return Value
 	 */
-	double getValue ();
+	double getValue () const;
 
 	/**
 	 * Handler for BEvents::ValueChangedEvent. Simply calls the callback

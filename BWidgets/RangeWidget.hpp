@@ -15,7 +15,8 @@ class RangeWidget : public ValueWidget
 {
 public:
 	RangeWidget ();
-	RangeWidget (double  x, double y, double width, double height, std::string name, double value, double min, double max, double step);
+	RangeWidget (const double  x, const double y, const double width, const double height, const std::string& name,
+				 const double value, const double min, const double max, const double step);
 	~RangeWidget ();
 
 	/**
@@ -23,33 +24,33 @@ public:
 	 * Emits a value changed event and (if visible) an expose event.
 	 * @param val Value
 	 */
-	virtual void setValue (double val) override;
+	virtual void setValue (const double val) override;
 
 	/**
 	 * Sets the lower limit. Forces the value into the new range. Emits a value
 	 * changed event (if value changed) and (if visible) an expose event.
 	 * @param min Lower limit
 	 */
-	void setMin (double min);
+	void setMin (const double min);
 
 /**
 	 * Gets the lower limit.
 	 * @return Lower limit
 	 */
-	double getMin ();
+	double getMin () const;
 
 	/**
 	 * Sets the upper limit. Forces the value into the new range. Emits a value
 	 * changed event (if value changed) and (if visible) an expose event.
 	 * @param max Upper limit
 	 */
-	void setMax (double max);
+	void setMax (const double max);
 
 	/**
 	 * Gets the upper limit.
 	 * @return Upper limit
 	 */
-	double getMax ();
+	double getMax () const;
 
 	/**
 	 * Sets the increment steps for the value.
@@ -62,13 +63,13 @@ public:
 	 * 			   display of dependent widgets (dials, sliders, ... ) in the
 	 * 			   opposite direction.
 	 */
-	void setStep (double step);
+	void setStep (const double step);
 
 	/**
 	 * Gets the increment steps for the value.
 	 * @return Increment steps.
 	 */
-	double getStep ();
+	double getStep () const;
 
 protected:
 	double rangeMin;
