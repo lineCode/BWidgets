@@ -20,16 +20,14 @@ public:
 
 	/**
 	 * Scans theme for widget properties and applies these properties.
-	 * @param theme Theme to be scanned
-	 */
-	virtual void applyTheme (BStyles::Theme& theme);
-
-	/**
-	 * Scans theme for widget properties and applies these properties.
-	 * @param theme Theme to be scanned
+	 * @param theme Theme to be scanned.
+	 * 				Styles used are:
+	 * 				"fgColors" for BColors::ColorSet (scale)
+	 * 				"bgColors" for BStyles::ColorSet (knob and background)
 	 * @param name Name of the BStyles::StyleSet within the theme to be
 	 * 		  	   applied.
 	 */
+	virtual void applyTheme (BStyles::Theme& theme);
 	virtual void applyTheme (BStyles::Theme& theme, const std::string& name);
 
 	/**
@@ -39,7 +37,8 @@ public:
 	virtual void onButtonPressed (BEvents::PointerEvent* event) override;
 
 	/**
-	 * Handles the BEvents::BUTTON_PRESS_EVENT to move the slider.
+	 * Handles the BEvents::POINTER_MOTION_WHILE_BUTTON_PRESSED_EVENT to move
+	 * the slider.
 	 * @param event Pointer to a poiter event emitted by the same widget.
 	 */
 	virtual void onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event) override;
