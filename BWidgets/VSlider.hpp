@@ -1,22 +1,22 @@
-#ifndef BWIDGETS_DIAL_HPP_
-#define BWIDGETS_DIAL_HPP_
+#ifndef BWIDGETS_VSLIDER_HPP_
+#define BWIDGETS_VSLIDER_HPP_
 
 #include "RangeWidget.hpp"
 
 namespace BWidgets
 {
 /**
- * Class BWidgets::Dial
+ * Class BWidgets::VSlider
  *
- * RangeWidget class dial.
+ * RangeWidget class for a vertical slider
  */
-class Dial : public RangeWidget
+class VSlider : public RangeWidget
 {
 public:
-	Dial ();
-	Dial (const double x, const double y, const double width, const double height, const std::string& name,
-		  const double value, const double min, const double max, const double step);
-	~Dial ();
+	VSlider ();
+	VSlider (const double  x, const double y, const double width, const double height, const std::string& name,
+			 const double value, const double min, const double max, const double step);
+	~VSlider ();
 
 	/**
 	 * Scans theme for widget properties and applies these properties.
@@ -33,17 +33,16 @@ public:
 	virtual void applyTheme (BStyles::Theme& theme, const std::string& name);
 
 	/**
-	 * Handles the BEvents::BUTTON_PRESS_EVENT to turn the dial.
+	 * Handles the BEvents::BUTTON_PRESS_EVENT to move the slider.
 	 * @param event Pointer to a poiter event emitted by the same widget.
 	 */
 	virtual void onButtonPressed (BEvents::PointerEvent* event) override;
 
 	/**
-	 * Handles the BEvents::BUTTON_PRESS_EVENT to turn the dial.
+	 * Handles the BEvents::BUTTON_PRESS_EVENT to move the slider.
 	 * @param event Pointer to a poiter event emitted by the same widget.
 	 */
 	virtual void onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event) override;
-
 
 protected:
 	virtual void draw () override;
@@ -55,5 +54,4 @@ protected:
 
 }
 
-
-#endif /* BWIDGETS_DIAL_HPP_ */
+#endif /* BWIDGETS_VSLIDER_HPP_ */
