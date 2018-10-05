@@ -176,6 +176,7 @@ const ColorSet greens = ColorSet ({green, lightgreen, darkgreen, black});
 const ColorSet blues = ColorSet ({blue, lightblue, darkblue, black});
 const ColorSet greys = ColorSet ({grey, lightgrey, darkgrey, black});
 const ColorSet whites = ColorSet ({lightgrey, white, grey, black});
+const ColorSet darks = ColorSet ({darkgrey, grey, black, black});
 
 }
 
