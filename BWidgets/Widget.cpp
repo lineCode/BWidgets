@@ -386,11 +386,12 @@ void Widget::draw (const double x, const double y, const double width, const dou
 			(width_ >= 2 * outerBorders) &&
 			(height_ >= 2 * outerBorders))
 		{
-			cairo_rectangle_rounded (cr, outerBorders, outerBorders,
-									 width_ - 2 * outerBorders, height_ - 2 * outerBorders, radius);
+			double lw = border_.getLine()->getWidth();
+			cairo_rectangle_rounded (cr, outerBorders + lw / 2, outerBorders + lw / 2,
+									 width_ - 2 * outerBorders - lw, height_ - 2 * outerBorders - lw, radius);
 
 			cairo_set_source_rgba (cr, lc.getRed(), lc.getGreen(), lc.getBlue(), lc.getAlpha());
-			cairo_set_line_width (cr, border_.getLine()->getWidth());
+			cairo_set_line_width (cr, lw);
 			cairo_stroke (cr);
 		}
 	}
