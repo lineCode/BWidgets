@@ -14,6 +14,12 @@ VSlider::VSlider (const double  x, const double y, const double width, const dou
 
 VSlider::~VSlider () {}
 
+void VSlider::update ()
+{
+	draw (0, 0, width_, height_);
+	if (isVisible ()) postRedisplay ();
+}
+
 void VSlider::applyTheme (BStyles::Theme& theme) {applyTheme (theme, name_);}
 
 void VSlider::applyTheme (BStyles::Theme& theme, const std::string& name)
@@ -28,12 +34,7 @@ void VSlider::applyTheme (BStyles::Theme& theme, const std::string& name)
 	void* bgPtr = theme.getStyle(name, "bgColors");
 	if (bgPtr) bgColors = *((BColors::ColorSet*) bgPtr);
 
-	if (fgPtr || bgPtr)
-	{
-		draw ();
-		if (isVisible ()) postRedisplay ();
-	}
-
+	if (fgPtr || bgPtr) update ();
 }
 
 void VSlider::onButtonPressed (BEvents::PointerEvent* event)
@@ -63,8 +64,6 @@ void VSlider::onButtonPressed (BEvents::PointerEvent* event)
 }
 
 void VSlider::onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event) {onButtonPressed (event);}
-
-void VSlider::draw () {draw (0, 0, width_, height_);}
 
 void VSlider::draw (const double x, const double y, const double width, const double height)
 {

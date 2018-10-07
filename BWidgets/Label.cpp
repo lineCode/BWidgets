@@ -13,15 +13,30 @@ void Label::setText (const std::string& text)
 	if (text != labelText)
 	{
 		labelText = text;
-		draw ();
-		if (isVisible ())postRedisplay ();
+		update ();
 	}
 }
 std::string Label::getText () const {return labelText;}
-void Label::setTextColors (const BColors::ColorSet& colorset) {labelColors = colorset;}
+
+void Label::setTextColors (const BColors::ColorSet& colorset)
+{
+	labelColors = colorset;
+	update ();
+}
 BColors::ColorSet* Label::getTextColors () {return &labelColors;}
-void Label::setFont (const BStyles::Font& font) {labelFont = font;}
+
+void Label::setFont (const BStyles::Font& font)
+{
+	labelFont = font;
+	update ();
+}
 BStyles::Font* Label::getFont () {return &labelFont;}
+
+void Label::update ()
+{
+	draw (0, 0, width_, height_);
+	if (isVisible ()) postRedisplay ();
+}
 
 void Label::applyTheme (BStyles::Theme& theme) {applyTheme (theme, name_);}
 
@@ -37,14 +52,10 @@ void Label::applyTheme (BStyles::Theme& theme, const std::string& name)
 	void* fontPtr = theme.getStyle(name, "font");
 	if (fontPtr) labelFont = *((BStyles::Font*) fontPtr);
 
-	if (colorsPtr || fontPtr)
-		{
-			draw ();
-			if (isVisible ()) postRedisplay ();
-		}
+	if (colorsPtr || fontPtr) update ();
 }
 
-void Label::draw (){draw (0.0, 0.0, width_, height_);}
+
 
 void Label::draw (const double x, const double y, const double width, const double height)
 {

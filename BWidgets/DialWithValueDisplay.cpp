@@ -14,28 +14,33 @@ DialWithValueDisplay::DialWithValueDisplay (const double x, const double y, cons
 	valueDisplay(0, 0.75 * height, width, 0.25 * height, name),
 	valFormat (valueFormat)
 {
-	double w = (height > width ? width : height);
-	double h = (height > width ? width : height);
-	dial.moveTo (0.5 * width - 0.5 * w, 0.5 * height - 0.5 * w);
-	dial.setWidth (w);
-	dial.setHeight (w);
+	updateChildCoords ();
 	dial.setCallbackFunction (BEvents::EventType::VALUE_CHANGED_EVENT, DialWithValueDisplay::redirectPostValueChanged);
+	update ();
 	add (dial);
-
-	valueDisplay.moveTo (0.5 * width - 0.5 * w, 0.5 * height + 0.3 * h);
-	valueDisplay.setWidth (w);
-	valueDisplay.setHeight (0.25 * h);
-	valueDisplay.getFont ()->setFontSize (0.2 * w);
-	valueDisplay.setText (BValues::toBString (valueFormat, value));
 	add (valueDisplay);
 }
 
 DialWithValueDisplay::~DialWithValueDisplay () {}
 
-void DialWithValueDisplay::setValueFormat (const std::string& valueFormat) {valFormat = valueFormat;}
+void DialWithValueDisplay::setValueFormat (const std::string& valueFormat)
+{
+	valFormat = valueFormat;
+	update ();
+}
+
 std::string DialWithValueDisplay::getValueFormat () const {return valFormat;}
+
 Dial* DialWithValueDisplay::getDial () {return &dial;}
+
 Label* DialWithValueDisplay::getValueDisplay () {return &valueDisplay;}
+
+void DialWithValueDisplay::update ()
+{
+	updateChildCoords ();
+	draw (0, 0, width_, height_);
+	if (isVisible ()) postRedisplay ();
+}
 
 void DialWithValueDisplay::applyTheme (BStyles::Theme& theme) {applyTheme (theme, name_);}
 void DialWithValueDisplay::applyTheme (BStyles::Theme& theme, const std::string& name)
@@ -43,11 +48,27 @@ void DialWithValueDisplay::applyTheme (BStyles::Theme& theme, const std::string&
 	Widget::applyTheme (theme, name);
 	dial.applyTheme (theme, name);
 	valueDisplay.applyTheme (theme, name);
+	update ();
+}
+
+void DialWithValueDisplay::updateChildCoords ()
+{
+	double w = (height_ > width_ ? width_ : height_);
+	double h = (height_ > width_ ? width_ : height_);
+	dial.moveTo (0.5 * width_ - 0.5 * w, 0.5 * height_ - 0.5 * w);
+	dial.setWidth (w);
+	dial.setHeight (w);
+
+	valueDisplay.moveTo (0.5 * width_ - 0.5 * w, 0.5 * height_ + 0.3 * h);
+	valueDisplay.setWidth (w);
+	valueDisplay.setHeight (0.25 * h);
+	valueDisplay.getFont ()->setFontSize (0.2 * w);
+	valueDisplay.setText (BValues::toBString (valFormat, value));
+	valueDisplay.update ();
 }
 
 void DialWithValueDisplay::redirectPostValueChanged (BEvents::Event* event)
 {
-
 	if (event && (event->getEventType () == BEvents::EventType::VALUE_CHANGED_EVENT) && event->getWidget ())
 	{
 		BEvents::ValueChangedEvent* ev = (BEvents::ValueChangedEvent*) event;
@@ -60,9 +81,6 @@ void DialWithValueDisplay::redirectPostValueChanged (BEvents::Event* event)
 		}
 	}
 }
-
-
-void DialWithValueDisplay::draw () {draw (0.0, 0.0, width_, height_);}
 
 void DialWithValueDisplay::draw (const double x, const double y, const double width, const double height)
 {

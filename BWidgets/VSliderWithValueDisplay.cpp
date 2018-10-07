@@ -1,11 +1,11 @@
-#include "HSliderWithValueDisplay.hpp"
+#include "VSliderWithValueDisplay.hpp"
 
 namespace BWidgets
 {
-HSliderWithValueDisplay::HSliderWithValueDisplay () :
-		HSliderWithValueDisplay (0.0, 0.0, 50.0, 60.0, "valueslider", 0.0, 0.0, 100.0, 1.0, "%3d", ON_TOP) {}
+VSliderWithValueDisplay::VSliderWithValueDisplay () :
+		VSliderWithValueDisplay (0.0, 0.0, 50.0, 60.0, "valueslider", 0.0, 0.0, 100.0, 1.0, "%3d", ON_TOP) {}
 
-HSliderWithValueDisplay::HSliderWithValueDisplay (const double x, const double y, const double width, const double height, const std::string& name,
+VSliderWithValueDisplay::VSliderWithValueDisplay (const double x, const double y, const double width, const double height, const std::string& name,
 												  const double value, const double min, const double max, const double step,
 												  const std::string& valueFormat, const ValueDisplayPosition position) :
 	RangeWidget (x, y, width, height, name, value, min, max, step),
@@ -14,31 +14,43 @@ HSliderWithValueDisplay::HSliderWithValueDisplay (const double x, const double y
 	valFormat (valueFormat), valPosition (position)
 {
 	updateChildCoords ();
-	slider.setCallbackFunction (BEvents::EventType::VALUE_CHANGED_EVENT, HSliderWithValueDisplay::redirectPostValueChanged);
-	valueDisplay.setText (BValues::toBString (valueFormat, value));
-	update ();
+	slider.setCallbackFunction (BEvents::EventType::VALUE_CHANGED_EVENT, VSliderWithValueDisplay::redirectPostValueChanged);
 	add (slider);
+	valueDisplay.setText (BValues::toBString (valueFormat, value));
 	add (valueDisplay);
 }
 
-HSliderWithValueDisplay::~HSliderWithValueDisplay () {}
+VSliderWithValueDisplay::~VSliderWithValueDisplay () {}
 
-void HSliderWithValueDisplay::setValueFormat (const std::string& valueFormat) {valFormat = valueFormat;}
-std::string HSliderWithValueDisplay::getValueFormat () const {return valFormat;}
-void HSliderWithValueDisplay::setValuePosition (const ValueDisplayPosition position) {valPosition = position;}
-ValueDisplayPosition HSliderWithValueDisplay::getValuePosition () const {return valPosition;}
-HSlider* HSliderWithValueDisplay::getSlider () {return &slider;}
-Label* HSliderWithValueDisplay::getValueDisplay () {return &valueDisplay;}
+void VSliderWithValueDisplay::setValueFormat (const std::string& valueFormat)
+{
+	valFormat = valueFormat;
+	update ();
+}
 
-void HSliderWithValueDisplay::update ()
+std::string VSliderWithValueDisplay::getValueFormat () const {return valFormat;}
+
+void VSliderWithValueDisplay::setValuePosition (const ValueDisplayPosition position)
+{
+	valPosition = position;
+	update ();
+}
+
+ValueDisplayPosition VSliderWithValueDisplay::getValuePosition () const {return valPosition;}
+
+VSlider* VSliderWithValueDisplay::getSlider () {return &slider;}
+
+Label* VSliderWithValueDisplay::getValueDisplay () {return &valueDisplay;}
+
+void VSliderWithValueDisplay::update ()
 {
 	updateChildCoords ();
 	draw (0, 0, width_, height_);
 	if (isVisible ()) postRedisplay ();
 }
 
-void HSliderWithValueDisplay::applyTheme (BStyles::Theme& theme) {applyTheme (theme, name_);}
-void HSliderWithValueDisplay::applyTheme (BStyles::Theme& theme, const std::string& name)
+void VSliderWithValueDisplay::applyTheme (BStyles::Theme& theme) {applyTheme (theme, name_);}
+void VSliderWithValueDisplay::applyTheme (BStyles::Theme& theme, const std::string& name)
 {
 	Widget::applyTheme (theme, name);
 	slider.applyTheme (theme, name);
@@ -46,7 +58,7 @@ void HSliderWithValueDisplay::applyTheme (BStyles::Theme& theme, const std::stri
 	update ();
 }
 
-void HSliderWithValueDisplay::redirectPostValueChanged (BEvents::Event* event)
+void VSliderWithValueDisplay::redirectPostValueChanged (BEvents::Event* event)
 {
 
 	if (event && (event->getEventType () == BEvents::EventType::VALUE_CHANGED_EVENT) && event->getWidget ())
@@ -55,7 +67,7 @@ void HSliderWithValueDisplay::redirectPostValueChanged (BEvents::Event* event)
 		Widget* w = (Widget*) ev->getWidget ();
 		if (w->getParent ())
 		{
-			HSliderWithValueDisplay* p = (HSliderWithValueDisplay*) w->getParent ();
+			VSliderWithValueDisplay* p = (VSliderWithValueDisplay*) w->getParent ();
 			p->setValue (ev->getValue ());
 			p->updateChildCoords ();
 			p->getValueDisplay ()->setText(BValues::toBString (p->getValueFormat (), p->getValue ()));
@@ -63,7 +75,7 @@ void HSliderWithValueDisplay::redirectPostValueChanged (BEvents::Event* event)
 	}
 }
 
-void HSliderWithValueDisplay::updateChildCoords ()
+void VSliderWithValueDisplay::updateChildCoords ()
 {
 	double th = 0;
 	double tw = 0;
@@ -80,9 +92,10 @@ void HSliderWithValueDisplay::updateChildCoords ()
 		if (height_ <= 8) height_ = 8;							// Force minimum height
 
 		th = (height_ <= 32 ? height_ / 2 : 16);				// Value display half height, but max. 16 px
+		if (th > width_ / 2.2) th = width_ / 2.2;				// ... but not higher than 2.2 * width
 		tw = th * 2.2;
-		ty = (valPosition == ON_TOP ? 0 : height_ - th);
 		tx = width_ / 2 - tw / 2;
+		ty = (valPosition == ON_TOP ? 0 : height_ - th);
 		sh = height_ - th;
 		sy = (valPosition == ON_TOP ? th : 0);
 	}
@@ -92,6 +105,7 @@ void HSliderWithValueDisplay::updateChildCoords ()
 		if (width_ <= 16) width_ = 16;							// Force minimum width
 
 		th = (height_ <= 16 ? height_ : 16);					// Value display max. 16 px
+		if (th > width_ / 2.2) th = width_ / 2.2;				// ... but not higher than 2.2 * width
 		tw = th * 2.2;
 		ty = height_ / 2 - th / 2;
 		tx = (valPosition == ON_LEFT ? 0: width_ - tw);
@@ -103,15 +117,15 @@ void HSliderWithValueDisplay::updateChildCoords ()
 	slider.setWidth (sw);
 	slider.setHeight (sh);
 
+	valueDisplay.getFont ()->setFontSize (th);
 	valueDisplay.moveTo (tx, ty);
 	valueDisplay.setWidth (tw);
 	valueDisplay.setHeight (th);
-	BStyles::Font* font = valueDisplay.getFont ();
-	font->setFontSize (th);
 	valueDisplay.update ();
+
 }
 
-void HSliderWithValueDisplay::draw (const double x, const double y, const double width, const double height)
+void VSliderWithValueDisplay::draw (const double x, const double y, const double width, const double height)
 {
 	// Draw super class widget elements only
 	Widget::draw (x, y, width, height);

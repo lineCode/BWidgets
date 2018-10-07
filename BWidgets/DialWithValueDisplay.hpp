@@ -31,7 +31,7 @@ public:
 	std::string getValueFormat () const;
 
 	/**
-	 * Gets (a poiter to) the dial for direct access.
+	 * Gets (a pointer to) the dial for direct access.
 	 * @return Pointer to the dial
 	 */
 	Dial* getDial ();
@@ -41,6 +41,14 @@ public:
 	 * @return Pointer to the label
 	 */
 	Label* getValueDisplay ();
+
+	/**
+	 * Calls a redraw of the widget and calls postRedisplay () if the the
+	 * Widget is visible.
+	 * This method should be called if the widgets properties are indirectly
+	 * changed.
+	 */
+	virtual void update () override;
 
 	/**
 	 * Scans theme for widget properties and applies these properties.
@@ -54,8 +62,8 @@ public:
 	virtual void applyTheme (BStyles::Theme& theme, const std::string& name);
 
 protected:
+	void updateChildCoords ();
 	static void redirectPostValueChanged (BEvents::Event* event);
-	virtual void draw () override;
 	virtual void draw (const double x, const double y, const double width, const double height) override;
 
 	Dial dial;

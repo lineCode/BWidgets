@@ -14,6 +14,12 @@ HSlider::HSlider (const double  x, const double y, const double width, const dou
 
 HSlider::~HSlider () {}
 
+void HSlider::update ()
+{
+	draw (0, 0, width_, height_);
+	if (isVisible ()) postRedisplay ();
+}
+
 void HSlider::applyTheme (BStyles::Theme& theme) {applyTheme (theme, name_);}
 
 void HSlider::applyTheme (BStyles::Theme& theme, const std::string& name)
@@ -28,11 +34,7 @@ void HSlider::applyTheme (BStyles::Theme& theme, const std::string& name)
 	void* bgPtr = theme.getStyle(name, "bgColors");
 	if (bgPtr) bgColors = *((BColors::ColorSet*) bgPtr);
 
-	if (fgPtr || bgPtr)
-	{
-		draw ();
-		if (isVisible ()) postRedisplay ();
-	}
+	if (fgPtr || bgPtr) update ();
 
 }
 
@@ -63,8 +65,6 @@ void HSlider::onButtonPressed (BEvents::PointerEvent* event)
 }
 
 void HSlider::onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event) {onButtonPressed (event);}
-
-void HSlider::draw () {draw (0, 0, width_, height_);}
 
 void HSlider::draw (const double x, const double y, const double width, const double height)
 {

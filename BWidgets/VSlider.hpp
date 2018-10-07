@@ -19,6 +19,14 @@ public:
 	~VSlider ();
 
 	/**
+	 * Calls a redraw of the widget and calls postRedisplay () if the the
+	 * Widget is visible.
+	 * This method should be called if the widgets properties are indirectly
+	 * changed.
+	 */
+	virtual void update () override;
+
+	/**
 	 * Scans theme for widget properties and applies these properties.
 	 * @param theme Theme to be scanned.
 	 * 				Styles used are:
@@ -44,7 +52,6 @@ public:
 	virtual void onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event) override;
 
 protected:
-	virtual void draw () override;
 	virtual void draw (const double x, const double y, const double width, const double height) override;
 
 	BColors::ColorSet fgColors;

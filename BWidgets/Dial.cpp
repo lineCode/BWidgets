@@ -14,6 +14,12 @@ Dial::Dial (const double x, const double y, const double width, const double hei
 
 Dial:: ~Dial () {}
 
+void Dial::update ()
+{
+	draw (0, 0, width_, height_);
+	if (isVisible ()) postRedisplay ();
+}
+
 void Dial::applyTheme (BStyles::Theme& theme) {applyTheme (theme, name_);}
 
 void Dial::applyTheme (BStyles::Theme& theme, const std::string& name)
@@ -30,8 +36,7 @@ void Dial::applyTheme (BStyles::Theme& theme, const std::string& name)
 
 	if (fgPtr || bgPtr)
 	{
-		draw ();
-		if (isVisible ()) postRedisplay ();
+		update ();
 	}
 }
 
@@ -63,11 +68,6 @@ void Dial::onButtonPressed (BEvents::PointerEvent* event)
 }
 
 void Dial::onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event) {onButtonPressed (event);}
-
-void Dial::draw ()
-{
-	draw (0.0, 0.0, width_, height_);
-}
 
 void Dial::draw (const double x, const double y, const double width, const double height)
 {

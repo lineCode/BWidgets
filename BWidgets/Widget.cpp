@@ -31,7 +31,7 @@ Widget::Widget(const double x, const double y, const double width, const double 
 	cbfunction.fill (Widget::defaultCallback);
 
 	widgetSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
-	draw ();
+	draw (0, 0, width_, height_);
 }
 
 Widget::~Widget()
@@ -132,7 +132,7 @@ void Widget::setWidth (const double width)
 			isVisible_ = vis;
 			cairo_surface_destroy (widgetSurface);	// destroy old surface first
 			widgetSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width_, height_);
-			draw ();
+			draw (0, 0, width_, height_);
 			postRedisplay ();
 		}
 		else
@@ -140,7 +140,7 @@ void Widget::setWidth (const double width)
 			width_ =  width;
 			cairo_surface_destroy (widgetSurface);	// destroy old surface first
 			widgetSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width_, height_);
-			draw ();
+			draw (0, 0, width_, height_);
 		}
 	}
 }
@@ -157,7 +157,7 @@ void Widget::setHeight (const double height)
 			isVisible_ = vis;
 			cairo_surface_destroy (widgetSurface);	// destroy old surface first
 			widgetSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width_, height_);
-			draw ();
+			draw (0, 0, width_, height_);
 			postRedisplay ();
 		}
 		else
@@ -165,7 +165,7 @@ void Widget::setHeight (const double height)
 			height_ = height;
 			cairo_surface_destroy (widgetSurface);	// destroy old surface first
 			widgetSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width_, height_);
-			draw ();
+			draw (0, 0, width_, height_);
 		}
 	}
 }
@@ -173,15 +173,13 @@ void Widget::setHeight (const double height)
 void Widget::setBorder (const BStyles::Border& border)
 {
 	border_ = border;
-	draw ();
-	if (isVisible ()) postRedisplay ();
+	update ();
 }
 
 void Widget::setBackground (const BStyles::Fill& background)
 {
 	background_ = background;
-	draw ();
-	if (isVisible ()) postRedisplay ();
+	update ();
 }
 
 Widget* Widget::getParent () const {return parent_;}
@@ -199,6 +197,12 @@ bool Widget::isVisible()
 		if (!w->isVisible_) return false;
 	}
 	return true;
+}
+
+void Widget::update ()
+{
+	draw (0, 0, width_, height_);
+	if (isVisible ()) postRedisplay ();
 }
 
 bool Widget::isPointInWidget (const double x, const double y) const {return ((x >= 0.0) && (x <= width_) && (y >= 0.0) && (y <= height_));}
@@ -252,8 +256,7 @@ void Widget::applyTheme (BStyles::Theme& theme, const std::string& name)
 
 	if (borderPtr || backgroundPtr)
 	{
-		draw ();
-		if (isVisible ()) postRedisplay ();
+		update ();
 	}
 }
 
@@ -309,11 +312,6 @@ void Widget::redisplay (cairo_surface_t* surface, double x, double y, double wid
 			w->redisplay (surface, xNew, yNew, width, height);
 		}
 	}
-}
-
-void Widget::draw ()
-{
-	draw (0.0, 0.0, width_, height_);
 }
 
 void Widget::draw (const double x, const double y, const double width, const double height)

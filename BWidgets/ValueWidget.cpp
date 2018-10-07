@@ -14,9 +14,8 @@ void ValueWidget::setValue (const double val)
 	if (val != value)
 	{
 		value = val;
-		draw ();
+		update ();
 		postValueChanged ();
-		if (isVisible ()) postRedisplay ();
 	}
 }
 

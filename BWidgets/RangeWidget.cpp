@@ -36,7 +36,7 @@ void RangeWidget::setMin (const double min)
 	{
 		rangeMin = newMin;
 		if (getValue () < rangeMin) setValue (rangeMin);
-		else if (isVisible ()) postRedisplay ();
+		update ();
 	}
 }
 
@@ -49,7 +49,7 @@ void RangeWidget::setMax (const double max)
 	{
 		rangeMax = newMax;
 		if (getValue () > rangeMax) setValue (rangeMax);
-		else if (isVisible ()) postRedisplay ();
+		update ();
 	}
 }
 

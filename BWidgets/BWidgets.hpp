@@ -13,6 +13,7 @@
 #include "VSlider.hpp"
 #include "Dial.hpp"
 #include "HSliderWithValueDisplay.hpp"
+#include "VSliderWithValueDisplay.hpp"
 #include "DialWithValueDisplay.hpp"
 
 #endif /*BWIDGETS_HPP_*/

@@ -56,6 +56,14 @@ public:
 	BStyles::Font* getFont ();
 
 	/**
+	 * Calls a redraw of the widget and calls postRedisplay () if the the
+	 * Widget is visible.
+	 * This method should be called if the widgets properties are indirectly
+	 * changed.
+	 */
+	virtual void update () override;
+
+	/**
 	 * Scans theme for widget properties and applies these properties.
 	 * @param theme Theme to be scanned.
 	 * 				Styles used are:
@@ -68,7 +76,6 @@ public:
 	virtual void applyTheme (BStyles::Theme& theme, const std::string& name);
 
 protected:
-	virtual void draw () override;
 	virtual void draw (const double x, const double y, const double width, const double height) override;
 
 	BColors::ColorSet labelColors;

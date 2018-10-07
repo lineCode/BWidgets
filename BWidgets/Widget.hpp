@@ -168,6 +168,14 @@ public:
 	bool isVisible ();
 
 	/**
+	 * Calls a redraw of the widget and calls postRedisplay () if the the
+	 * Widget is visible.
+	 * This method should be called if the widgets properties are indirectly
+	 * changed.
+	 */
+	virtual void update ();
+
+	/**
 	 * Requests a redisplay of the widgets area (and all underlying widget
 	 * areas) by emitting a BEvents::ExposeEvent.
 	 */
@@ -270,7 +278,6 @@ protected:
 	void postRedisplay (const double x, const double y, const double width, const double height);
 	void redisplay (cairo_surface_t* surface, double x, double y, double width, double height);
 
-	virtual void draw ();
 	virtual void draw (const double x, const double y, const double width, const double height);
 
 	bool fitToArea (double& x, double& y, double& width, double& height);
@@ -363,13 +370,25 @@ public:
 	Widget* getInput (BEvents::InputDevice device) const;
 
 protected:
+
+	/**
+	 * Communication interface to the host via Pugl. Translates PuglEvents to
+	 * BEvents::Event derived objects.
+	 */
 	static void translatePuglEvent (PuglView* view, const PuglEvent* event);
+
 	void purgeEventQueue ();
 
 	std::string title_;
 	PuglView* view_;
 	PuglNativeWindow nativeWindow_;
 	bool quit_;
+
+	/**
+	 * Stores either nullptr or (a pointer to) the widget that emitted the
+	 * BEvents::BUTTON_PRESS_EVENT until a BEvents::BUTTON_RELEASE_EVENT or
+	 * TODO the linked widget is released or destroyed.
+	 */
 	std::array<Widget*, BEvents::InputDevice::NR_OF_BUTTONS> input;
 	std::vector<BEvents::Event*> eventQueue;
 };

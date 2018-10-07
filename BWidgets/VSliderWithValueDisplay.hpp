@@ -1,9 +1,9 @@
-#ifndef BWIDGETS_HSLIDERWITHVALUEDISPLAY_HPP_
-#define BWIDGETS_HSLIDERWITHVALUEDISPLAY_HPP_
+#ifndef BWIDGETS_VSLIDERWITHVALUEDISPLAY_HPP_
+#define BWIDGETS_VSLIDERWITHVALUEDISPLAY_HPP_
 
 #include "RangeWidget.hpp"
 #include "Label.hpp"
-#include "HSlider.hpp"
+#include "VSlider.hpp"
 
 namespace BWidgets
 {
@@ -21,19 +21,20 @@ typedef enum {
 } ValueDisplayPosition;
 #endif
 
+
 /**
- * Class BWidgets::HSliderWithValueDisplay
+ * Class BWidgets::VSliderWithValueDisplay
  *
- * Composite RangeWidget consisting of a horizontal slider and a label widget.
+ * Composite RangeWidget consisting of a vertical slider and a label widget.
  */
-class HSliderWithValueDisplay : public RangeWidget
+class VSliderWithValueDisplay : public RangeWidget
 {
 public:
-	HSliderWithValueDisplay ();
-	HSliderWithValueDisplay (const double x, const double y, const double width, const double height, const std::string& name,
+	VSliderWithValueDisplay ();
+	VSliderWithValueDisplay (const double x, const double y, const double width, const double height, const std::string& name,
 			  	  	  	  	 const double value, const double min, const double max, const double step,
 							 const std::string& valueFormat, const ValueDisplayPosition position);
-	~HSliderWithValueDisplay ();
+	~VSliderWithValueDisplay ();
 
 	/**
 	 * Sets the value output format.
@@ -61,9 +62,9 @@ public:
 
 	/**
 	 * Gets (a pointer to) the slider widget for direct access
-	 * @return Pointer to BWidgets::HSlider
+	 * @return Pointer to BWidgets::VSlider
 	 */
-	HSlider* getSlider ();
+	VSlider* getSlider ();
 
 	/**
 	 * Gets (a pointer to) the Label for direct access.
@@ -95,7 +96,7 @@ protected:
 	void updateChildCoords ();
 	virtual void draw (const double x, const double y, const double width, const double height) override;
 
-	HSlider slider;
+	VSlider slider;
 	Label valueDisplay;
 
 	std::string valFormat;
@@ -104,4 +105,4 @@ protected:
 
 }
 
-#endif /* BWIDGETS_HSLIDERWITHVALUEDISPLAY_HPP_ */
+#endif /* BWIDGETS_VSLIDERWITHVALUEDISPLAY_HPP_ */
