@@ -13,10 +13,10 @@ VSliderWithValueDisplay::VSliderWithValueDisplay (const double x, const double y
 	valueDisplay(0, 0.75 * height, width, 0.25 * height, name),
 	valFormat (valueFormat), valPosition (position)
 {
-	updateChildCoords ();
 	slider.setCallbackFunction (BEvents::EventType::VALUE_CHANGED_EVENT, VSliderWithValueDisplay::redirectPostValueChanged);
-	add (slider);
 	valueDisplay.setText (BValues::toBString (valueFormat, value));
+	update ();
+	add (slider);
 	add (valueDisplay);
 }
 

@@ -15,6 +15,10 @@
 #include "HSliderWithValueDisplay.hpp"
 #include "VSliderWithValueDisplay.hpp"
 #include "DialWithValueDisplay.hpp"
+#include "Button.hpp"
+#include "ToggleButton.hpp"
+#include "TextButton.hpp"
+#include "TextToggleButton.hpp"
 
 #endif /*BWIDGETS_HPP_*/
 

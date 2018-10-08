@@ -30,8 +30,8 @@ public:
 	 * Scans theme for widget properties and applies these properties.
 	 * @param theme Theme to be scanned.
 	 * 				Styles used are:
-	 * 				"fgColors" for BColors::ColorSet (scale and dot)
-	 * 				"bgColors" for BStyles::ColorSet (knob and background)
+	 * 				"fgcolors" for BColors::ColorSet (scale and dot)
+	 * 				"fgcolors" for BStyles::ColorSet (knob and background)
 	 * @param name Name of the BStyles::StyleSet within the theme to be
 	 * 		  	   applied.
 	 */
@@ -47,7 +47,7 @@ public:
 	/**
 	 * Handles the BEvents::POINTER_MOTION_WHILE_BUTTON_PRESSED_EVENT to turn
 	 * the dial.
-	 * @param event Pointer to a poiter event emitted by the same widget.
+	 * @param event Pointer to a pointer event emitted by the same widget.
 	 */
 	virtual void onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event) override;
 

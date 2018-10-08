@@ -27,11 +27,11 @@ void VSlider::applyTheme (BStyles::Theme& theme, const std::string& name)
 	Widget::applyTheme (theme, name);
 
 	// Foreground colors (scale)
-	void* fgPtr = theme.getStyle(name, "fgColors");
+	void* fgPtr = theme.getStyle(name, "fgcolors");
 	if (fgPtr) fgColors = *((BColors::ColorSet*) fgPtr);
 
 	// Background colors (scale background, knob)
-	void* bgPtr = theme.getStyle(name, "bgColors");
+	void* bgPtr = theme.getStyle(name, "bgcolors");
 	if (bgPtr) bgColors = *((BColors::ColorSet*) bgPtr);
 
 	if (fgPtr || bgPtr) update ();

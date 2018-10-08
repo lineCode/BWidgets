@@ -20,6 +20,7 @@
 
 #include <stdint.h>
 #include <vector>
+#include <iostream>
 
 #define LIMIT(val, min, max) (val < min ? min : (val < max ? val : max))
 

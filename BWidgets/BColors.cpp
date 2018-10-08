@@ -107,7 +107,10 @@ Color* ColorSet::getColor (const State state)
 	{
 		return &colors[state];
 	}
-	else return &noColor;
+	else
+	{
+		return &noColor;
+	}
 }
 
 /*

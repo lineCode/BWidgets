@@ -30,8 +30,8 @@ public:
 	 * Scans theme for widget properties and applies these properties.
 	 * @param theme Theme to be scanned.
 	 * 				Styles used are:
-	 * 				"fgColors" for BColors::ColorSet (scale)
-	 * 				"bgColors" for BStyles::ColorSet (knob and background)
+	 * 				"fgcolors" for BColors::ColorSet (scale)
+	 * 				"bgcolors" for BStyles::ColorSet (knob and background)
 	 * @param name Name of the BStyles::StyleSet within the theme to be
 	 * 		  	   applied.
 	 */

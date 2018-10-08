@@ -21,11 +21,6 @@ void ValueWidget::setValue (const double val)
 
 double ValueWidget::getValue () const {return value;}
 
-void ValueWidget::onValueChanged (BEvents::ValueChangedEvent* event)
-{
-	cbfunction[BEvents::EventType::VALUE_CHANGED_EVENT] (event);
-}
-
 void ValueWidget::postValueChanged ()
 {
 	if (main_)

@@ -45,7 +45,7 @@ void Label::applyTheme (BStyles::Theme& theme, const std::string& name)
 	Widget::applyTheme (theme, name);
 
 	// Color
-	void* colorsPtr = theme.getStyle(name, "colors");
+	void* colorsPtr = theme.getStyle(name, "textcolors");
 	if (colorsPtr) labelColors = *((BColors::ColorSet*) colorsPtr);
 
 	// Font

@@ -31,12 +31,6 @@ public:
 	 */
 	double getValue () const;
 
-	/**
-	 * Handler for BEvents::ValueChangedEvent. Simply calls the callback
-	 * function defined using setCallbackFunction.
-	 */
-	virtual void onValueChanged (BEvents::ValueChangedEvent* event) override;
-
 protected:
 	void postValueChanged ();
 	double value;

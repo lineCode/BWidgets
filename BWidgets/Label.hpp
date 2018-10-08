@@ -67,7 +67,7 @@ public:
 	 * Scans theme for widget properties and applies these properties.
 	 * @param theme Theme to be scanned.
 	 * 				Styles used are:
-	 * 				"colors" for BColors::ColorSet
+	 * 				"textcolors" for BColors::ColorSet
 	 * 				"font" for BStyles::Font
 	 * @param name Name of the BStyles::StyleSet within the theme to be
 	 * 		  	   applied.

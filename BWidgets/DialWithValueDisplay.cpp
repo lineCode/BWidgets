@@ -14,7 +14,6 @@ DialWithValueDisplay::DialWithValueDisplay (const double x, const double y, cons
 	valueDisplay(0, 0.75 * height, width, 0.25 * height, name),
 	valFormat (valueFormat)
 {
-	updateChildCoords ();
 	dial.setCallbackFunction (BEvents::EventType::VALUE_CHANGED_EVENT, DialWithValueDisplay::redirectPostValueChanged);
 	update ();
 	add (dial);

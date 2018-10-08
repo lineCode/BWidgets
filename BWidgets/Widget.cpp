@@ -263,11 +263,11 @@ void Widget::applyTheme (BStyles::Theme& theme, const std::string& name)
 void Widget::onConfigure () {} // Empty, only Windows handle configure events
 void Widget::onExpose (BEvents::ExposeEvent* event) {} // Empty, only Windows handle expose events
 void Widget::onClose () {} // Empty, only Windows handle close events
-void Widget::onButtonPressed (BEvents::PointerEvent* event) {}
-void Widget::onButtonReleased (BEvents::PointerEvent* event) {}
-void Widget::onPointerMotion (BEvents::PointerEvent* event) {}
-void Widget::onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event) {}
-void Widget::onValueChanged (BEvents::ValueChangedEvent* event) {}
+void Widget::onButtonPressed (BEvents::PointerEvent* event) {cbfunction[BEvents::EventType::BUTTON_PRESS_EVENT] (event);}
+void Widget::onButtonReleased (BEvents::PointerEvent* event) {cbfunction[BEvents::EventType::BUTTON_RELEASE_EVENT] (event);}
+void Widget::onPointerMotion (BEvents::PointerEvent* event) {cbfunction[BEvents::EventType::POINTER_MOTION_EVENT] (event);}
+void Widget::onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event) {cbfunction[BEvents::EventType::POINTER_MOTION_WHILE_BUTTON_PRESSED_EVENT] (event);}
+void Widget::onValueChanged (BEvents::ValueChangedEvent* event) {cbfunction[BEvents::EventType::VALUE_CHANGED_EVENT] (event);}
 
 void Widget::defaultCallback (BEvents::Event* event) {}
 
