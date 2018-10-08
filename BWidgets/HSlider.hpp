@@ -8,7 +8,8 @@ namespace BWidgets
 /**
  * Class BWidgets::HSlider
  *
- * RangeWidget class for a horizontal slider
+ * RangeWidget class for a horizontal slider.
+ * The Widget is clickable by default.
  */
 class HSlider : public RangeWidget
 {

@@ -2,7 +2,7 @@
 
 namespace BWidgets
 {
-ToggleButton::ToggleButton () : ToggleButton (0.0, 0.0, 50.0, 50.0, "dial", 0.0) {}
+ToggleButton::ToggleButton () : ToggleButton (0.0, 0.0, 50.0, 50.0, "togglebutton", 0.0) {}
 
 ToggleButton::ToggleButton (const double x, const double y, const double width, const double height, const std::string& name, const double defaultValue) :
 		Button (x, y, width, height, name, defaultValue) {}

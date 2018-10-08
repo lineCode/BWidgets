@@ -9,7 +9,8 @@ namespace BWidgets
  * Class BWidgets::Button
  *
  * Basic button widget drawing a button. Is is a BWidgets::ValueWidget having
- * two conditions: on (value != 0) or off (value == 0)
+ * two conditions: on (value != 0) or off (value == 0). The Widget is clickable
+ * by default.
  */
 class Button : public ValueWidget
 {

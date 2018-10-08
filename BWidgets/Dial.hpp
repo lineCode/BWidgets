@@ -9,6 +9,7 @@ namespace BWidgets
  * Class BWidgets::Dial
  *
  * RangeWidget class dial.
+ * The Widget is clickable by default.
  */
 class Dial : public RangeWidget
 {

@@ -10,7 +10,10 @@ Dial::Dial () : Dial (0.0, 0.0, 50.0, 50.0, "dial", 0.0, 0.0, 100.0, 1.0) {}
 
 Dial::Dial (const double x, const double y, const double width, const double height, const std::string& name,
 			const double value, const double min, const double max, const double step) :
-		RangeWidget (x, y, width, height, name, value, min, max, step), fgColors (BColors::greens), bgColors (BColors::greys) {}
+		RangeWidget (x, y, width, height, name, value, min, max, step), fgColors (BColors::greens), bgColors (BColors::greys)
+{
+	setClickable (true);
+}
 
 Dial:: ~Dial () {}
 

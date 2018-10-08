@@ -25,7 +25,7 @@ Widget::Widget () : Widget (0.0, 0.0, 200.0, 200.0, "Widget") {}
 Widget::Widget (const double x, const double y, const double width, const double height) : Widget (x, y, width, height, "Widget") {}
 
 Widget::Widget(const double x, const double y, const double width, const double height, const std::string& name) :
-		x_ (x), y_ (y), width_ (width), height_ (height), isVisible_ (true),
+		x_ (x), y_ (y), width_ (width), height_ (height), visible (true), clickable (false),
 		main_ (nullptr), parent_ (nullptr), children_ (), border_ (BStyles::noBorder), background_ (BStyles::blackFill), name_ (name)
 {
 	cbfunction.fill (Widget::defaultCallback);
@@ -41,13 +41,13 @@ Widget::~Widget()
 
 void Widget::show ()
 {
-	isVisible_ = true;
+	visible = true;
 	if ((parent_) && parent_->isVisible ()) postRedisplay ();
 }
 
 void Widget::hide ()
 {
-	isVisible_ = false;
+	visible = false;
 	if ((parent_) && parent_->isVisible ()) postRedisplay ();
 }
 
@@ -103,12 +103,12 @@ void Widget::moveTo (const double x, const double y)
 	{
 		if (isVisible ())
 		{
-			bool vis = isVisible_;
-			isVisible_ = false;
+			bool vis = visible;
+			visible = false;
 			postRedisplay ();
 			x_ = x;
 			y_ = y;
-			isVisible_ = vis;
+			visible = vis;
 			postRedisplay ();
 		}
 		else
@@ -125,11 +125,11 @@ void Widget::setWidth (const double width)
 	{
 		if (isVisible ())
 		{
-			bool vis = isVisible_;
-			isVisible_ = false;
+			bool vis = visible;
+			visible = false;
 			postRedisplay ();
 			width_ = width;
-			isVisible_ = vis;
+			visible = vis;
 			cairo_surface_destroy (widgetSurface);	// destroy old surface first
 			widgetSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width_, height_);
 			draw (0, 0, width_, height_);
@@ -150,11 +150,11 @@ void Widget::setHeight (const double height)
 	{
 		if (isVisible ())
 		{
-			bool vis = isVisible_;
-			isVisible_ = false;
+			bool vis = visible;
+			visible = false;
 			postRedisplay ();
 			height_ = height;
-			isVisible_ = vis;
+			visible = vis;
 			cairo_surface_destroy (widgetSurface);	// destroy old surface first
 			widgetSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width_, height_);
 			draw (0, 0, width_, height_);
@@ -176,6 +176,8 @@ void Widget::setBorder (const BStyles::Border& border)
 	update ();
 }
 
+BStyles::Border* Widget::getBorder () {return &border_;}
+
 void Widget::setBackground (const BStyles::Fill& background)
 {
 	background_ = background;
@@ -194,10 +196,14 @@ bool Widget::isVisible()
 {
 	for (Widget* w = this; w; w = w->parent_)
 	{
-		if (!w->isVisible_) return false;
+		if (!w->visible) return false;
 	}
 	return true;
 }
+
+void Widget::setClickable (const bool status) {clickable = status;}
+
+bool Widget::isClickable () const {return clickable;}
 
 void Widget::update ()
 {
@@ -207,16 +213,16 @@ void Widget::update ()
 
 bool Widget::isPointInWidget (const double x, const double y) const {return ((x >= 0.0) && (x <= width_) && (y >= 0.0) && (y <= height_));}
 
-Widget* Widget::getWidgetAt (const double x, const double y)
+Widget* Widget::getWidgetAt (const double x, const double y, const bool checkVisibility, const bool checkClickability)
 {
-	if (main_ && isVisible_ && isPointInWidget (x, y))
+	if (main_ && isPointInWidget (x, y) && ((!checkVisibility) || visible))
 	{
-		Widget* finalw = this;
+		Widget* finalw = ((!checkClickability) || clickable ? this : nullptr);
 		for (Widget* w : children_)
 		{
 			double xNew = x - w->x_;
 			double yNew = y - w->y_;
-			Widget* nextw = w->getWidgetAt (xNew, yNew);
+			Widget* nextw = w->getWidgetAt (xNew, yNew, checkVisibility, checkClickability);
 			if (nextw)
 			{
 				finalw = nextw;
@@ -293,7 +299,7 @@ void Widget::postRedisplay (const double x, const double y, const double width, 
 
 void Widget::redisplay (cairo_surface_t* surface, double x, double y, double width, double height) // x and y are absolute coords
 {
-	if (main_ && isVisible_ && fitToArea (x, y, width, height))
+	if (main_ && visible && fitToArea (x, y, width, height))
 	{
 		// Copy widgets surface onto main surface
 		double x0 = getOriginX ();
@@ -623,7 +629,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* event)
 	switch (event->type) {
 	case PUGL_BUTTON_PRESS:
 		{
-			Widget* widget = w->getWidgetAt (event->button.x, event->button.y);
+			Widget* widget = w->getWidgetAt (event->button.x, event->button.y, true, true);
 			if (widget)
 			{
 				w->addEventToQueue (new BEvents::PointerEvent (widget,
@@ -671,7 +677,7 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* event)
 			// No button associated with a widget? Only POINTER_MOTION_EVENT
 			if (device == BEvents::NO_BUTTON)
 			{
-				Widget* widget = w->getWidgetAt (event->motion.x, event->motion.y);
+				Widget* widget = w->getWidgetAt (event->motion.x, event->motion.y, true, false);
 				if (widget)
 				{
 					w->addEventToQueue (new BEvents::PointerEvent (widget,

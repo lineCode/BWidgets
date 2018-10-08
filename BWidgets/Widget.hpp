@@ -132,7 +132,11 @@ public:
 	 */
 	void setBorder (const BStyles::Border& border);
 
-	//TODO BStyles::Border* getBorder ();
+	/**
+	 * Gets (a pointer to) the border of the widget.
+	 * @return Pointer to BStyles::Border
+	 */
+	BStyles::Border* getBorder ();
 
 	/**
 	 * (Re-)Defines the background of the widget. Redraws widget and emits a
@@ -166,6 +170,20 @@ public:
 	 * 		   FALSE.
 	 */
 	bool isVisible ();
+
+	/**
+	 * Defines whether the widget may emit BEvents::BUTTON_PRESS_EVENT's or
+	 * BEvents::BUTTON_RELEASE_Event's following a host button event.
+	 * @param status TRUE if widget is clickable, otherwise false
+	 */
+	void setClickable (const bool status);
+
+	/**
+	 * Gets whether the widget may emit BEvents::BUTTON_PRESS_EVENT's or
+	 * BEvents::BUTTON_RELEASE_Event's following a host button event.
+	 * @return TRUE if widget is clickable, otherwise false
+	 */
+	bool isClickable () const;
 
 	/**
 	 * Calls a redraw of the widget and calls postRedisplay () if the the
@@ -272,7 +290,7 @@ public:
 
 protected:
 	bool isPointInWidget (const double x, const double y) const;
-	Widget* getWidgetAt (const double x, const double y);
+	Widget* getWidgetAt (const double x, const double y, const bool checkVisibility, const bool checkClickability);
 
 	void passProperties (Widget* child);
 	void postRedisplay (const double x, const double y, const double width, const double height);
@@ -283,7 +301,8 @@ protected:
 	bool fitToArea (double& x, double& y, double& width, double& height);
 
 	double x_, y_, width_, height_;
-	bool isVisible_;
+	bool visible;
+	bool clickable;
 	Window* main_;
 	Widget* parent_;
 	std::vector <Widget*> children_;

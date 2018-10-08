@@ -19,6 +19,7 @@
 #include "ToggleButton.hpp"
 #include "TextButton.hpp"
 #include "TextToggleButton.hpp"
+#include "DrawingSurface.hpp"
 
 #endif /*BWIDGETS_HPP_*/
 

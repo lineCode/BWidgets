@@ -46,8 +46,6 @@ public:
 	virtual void applyTheme (BStyles::Theme& theme, const std::string& name);
 
 protected:
-	static void redirectPostButtonPressed (BEvents::Event* event);
-
 	Label buttonLabel;
 };
 

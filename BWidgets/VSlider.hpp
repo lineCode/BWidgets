@@ -8,7 +8,8 @@ namespace BWidgets
 /**
  * Class BWidgets::VSlider
  *
- * RangeWidget class for a vertical slider
+ * RangeWidget class for a vertical slider.
+ * The Widget is clickable by default.
  */
 class VSlider : public RangeWidget
 {
@@ -47,7 +48,7 @@ public:
 	/**
 	 * Handles the BEvents::POINTER_MOTION_WHILE_BUTTON_PRESSED_EVENT to move
 	 * the slider.
-	 * @param event Pointer to a poiter event emitted by the same widget.
+	 * @param event Pointer to a pointer event emitted by the same widget.
 	 */
 	virtual void onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event) override;
 

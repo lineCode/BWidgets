@@ -10,7 +10,10 @@ VSlider::VSlider () : VSlider (0, 0, 12, 100, "vslider", 0.0, 0.0, 100.0, 0.0) {
 
 VSlider::VSlider (const double  x, const double y, const double width, const double height, const std::string& name,
 				  const double value, const double min, const double max, const double step) :
-		RangeWidget (x, y, width, height, name, value, min, max, step), fgColors (BColors::greens), bgColors (BColors::greys) {}
+		RangeWidget (x, y, width, height, name, value, min, max, step), fgColors (BColors::greens), bgColors (BColors::greys)
+{
+	setClickable (true);
+}
 
 VSlider::~VSlider () {}
 

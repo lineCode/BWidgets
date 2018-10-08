@@ -2,10 +2,13 @@
 
 namespace BWidgets
 {
-Button::Button () : Button (0.0, 0.0, 50.0, 50.0, "dial", 0.0) {}
+Button::Button () : Button (0.0, 0.0, 50.0, 50.0, "button", 0.0) {}
 
 Button::Button (const double x, const double y, const double width, const double height, const std::string& name, const double defaultValue) :
-		ValueWidget (x, y, width, height, name, defaultValue) {}
+		ValueWidget (x, y, width, height, name, defaultValue)
+{
+	setClickable (true);
+}
 
 Button:: ~Button () {}
 
