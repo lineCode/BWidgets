@@ -3,7 +3,7 @@ Widget toolkit based on Cairo and Pugl.
 
 This is a simple widget toolkit for small programs and plugins that can directly be included. 
 
-Version 0.1
+Version 0.1 alpha (status: testing)
 
 Dependencies
 ------------
