@@ -58,13 +58,16 @@ double ExposeEvent::getHeight () const {return exposeHeight;}
  * Class BEvents::PointerEvent
  *****************************************************************************/
 
-PointerEvent::PointerEvent () : PointerEvent ((void*) nullptr, NO_EVENT, 0, 0, NO_BUTTON) {}
-PointerEvent::PointerEvent (void* widget, const EventType type, const double x, const double y, const InputDevice button) :
-		Event (widget, type), xpos (x), ypos (y), buttonNr (button) {}
+PointerEvent::PointerEvent () : PointerEvent ((void*) nullptr, NO_EVENT, 0, 0, 0, 0, NO_BUTTON) {}
+PointerEvent::PointerEvent (void* widget, const EventType type, const double x, const double y, const double deltaX, const double deltaY,
+							const InputDevice button) :
+		Event (widget, type), xpos (x), ypos (y), deltaX (deltaX), deltaY (deltaY), buttonNr (button) {}
 void PointerEvent::setX (const double x) {xpos = x;}
 double PointerEvent::getX () const {return xpos;}
 void PointerEvent::setY (const double y) {ypos = y;}
 double PointerEvent::getY () const {return ypos;}
+double PointerEvent::getDeltaX () const {return deltaX;}
+double PointerEvent::getDeltaY () const {return deltaY;}
 void PointerEvent::setButton (const InputDevice button) {buttonNr = button;}
 InputDevice PointerEvent::getButton () const {return buttonNr;}
 

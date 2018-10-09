@@ -93,6 +93,8 @@ public:
 
 	//TODO double getX ();
 	//TODO double getY ();
+	//TODO moveBackwards ();
+	//TODO moveFrontwards ();
 
 	/**
 	 * Gets the widgets x position relative to the position of its main window.
@@ -172,8 +174,8 @@ public:
 	bool isVisible ();
 
 	/**
-	 * Defines whether the widget may emit BEvents::BUTTON_PRESS_EVENT's or
-	 * BEvents::BUTTON_RELEASE_Event's following a host button event.
+	 * Defines whether the widget may emit BEvents::BUTTON_PRESS_EVENT's
+	 * following a host button event.
 	 * @param status TRUE if widget is clickable, otherwise false
 	 */
 	void setClickable (const bool status);
@@ -184,6 +186,21 @@ public:
 	 * @return TRUE if widget is clickable, otherwise false
 	 */
 	bool isClickable () const;
+
+	/**
+	 * Defines whether the widget may emit
+	 * BEvents::POINER_MOTION_WHILE_BUTTON_PRESSED_EVENT's following a host
+	 * button event.
+	 * @param status TRUE if widget is clickable, otherwise false
+	 */
+	void setDragable (const bool status);
+
+	/**
+	 * Gets whether the widget may emit BEvents::BUTTON_PRESS_EVENT's or
+	 * BEvents::BUTTON_RELEASE_Event's following a host button event.
+	 * @return TRUE if widget is clickable, otherwise false
+	 */
+	bool isDragable () const;
 
 	/**
 	 * Calls a redraw of the widget and calls postRedisplay () if the the
@@ -290,7 +307,7 @@ public:
 
 protected:
 	bool isPointInWidget (const double x, const double y) const;
-	Widget* getWidgetAt (const double x, const double y, const bool checkVisibility, const bool checkClickability);
+	Widget* getWidgetAt (const double x, const double y, const bool checkVisibility, const bool checkClickability, const bool checkDragability);
 
 	void passProperties (Widget* child);
 	void postRedisplay (const double x, const double y, const double width, const double height);
@@ -303,6 +320,7 @@ protected:
 	double x_, y_, width_, height_;
 	bool visible;
 	bool clickable;
+	bool dragable;
 	Window* main_;
 	Widget* parent_;
 	std::vector <Widget*> children_;
@@ -328,8 +346,8 @@ class Window : public Widget
 public:
 	Window ();
 	Window (const double width, const double height, const std::string& title, PuglNativeWindow nativeWindow);
-	//TODO Window (const Window& that)= delete; ?
-	//TODO Window& operator= (const Window& that) = delete; ?
+	//TODO Window (const Window& that);
+	//TODO Window& operator= (const Window& that);
 	~Window ();
 
 	/**
@@ -402,6 +420,9 @@ protected:
 	PuglView* view_;
 	PuglNativeWindow nativeWindow_;
 	bool quit_;
+
+	double pointerX;
+	double pointerY;
 
 	/**
 	 * Stores either nullptr or (a pointer to) the widget that emitted the

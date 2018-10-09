@@ -13,6 +13,7 @@ Dial::Dial (const double x, const double y, const double width, const double hei
 		RangeWidget (x, y, width, height, name, value, min, max, step), fgColors (BColors::greens), bgColors (BColors::greys)
 {
 	setClickable (true);
+	setDragable (true);
 }
 
 Dial:: ~Dial () {}

@@ -7,6 +7,7 @@ TextButton::TextButton () : TextButton (0.0, 0.0, 50.0, 50.0, "textbutton", 0.0)
 TextButton::TextButton (const double x, const double y, const double width, const double height, const std::string& name, const double defaultValue) :
 		Button (x, y, width, height, name, defaultValue), buttonLabel (0, 0, width - 2, height - 2, name)
 {
+	buttonLabel.setClickable  (false);
 	setValue (defaultValue);
 	add (buttonLabel);
 }

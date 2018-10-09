@@ -13,6 +13,7 @@ HSlider::HSlider (const double  x, const double y, const double width, const dou
 		RangeWidget (x, y, width, height, name, value, min, max, step), fgColors (BColors::greens), bgColors (BColors::greys)
 {
 	setClickable (true);
+	setDragable (true);
 }
 
 HSlider::~HSlider () {}

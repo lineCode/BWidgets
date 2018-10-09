@@ -220,7 +220,7 @@ void* StyleSet::getStyle (const std::string& styleName)
 	}
 
 	// No hit?
-	if (!ptr) std::cerr << "Msg from BStyles::StyleSet::getStyle(): " << stylesetName << "/" << styleName << " doesn't exist." << std:: endl;
+	// if (!ptr) std::cerr << "Msg from BStyles::StyleSet::getStyle(): " << stylesetName << "/" << styleName << " doesn't exist." << std:: endl;
 	return ptr;
 }
 
@@ -266,8 +266,8 @@ void Theme::removeStyle (const std::string& setName, const std::string& styleNam
 	}
 
 	// No hit?
-	std::cerr << "Msg from BStyles::Theme::removeStyle(): " << setName << "/" << styleName
-			  << " doesn't exist. Nothing to delete." << std:: endl;
+	// std::cerr << "Msg from BStyles::Theme::removeStyle(): " << setName << "/" << styleName
+	//		     << " doesn't exist. Nothing to delete." << std:: endl;
 	return;
 }
 
@@ -282,8 +282,8 @@ void* Theme::getStyle (const std::string& setName, const std::string& styleName)
 	}
 
 	// No hit?
-	std::cerr << "Msg from BStyles::Theme::getStyle(): " << setName << "/" << styleName
-			  << " doesn't exist." << std:: endl;
+	// std::cerr << "Msg from BStyles::Theme::getStyle(): " << setName << "/" << styleName
+	// 		     << " doesn't exist." << std:: endl;
 	return nullptr;
 }
 

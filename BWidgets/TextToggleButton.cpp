@@ -7,6 +7,7 @@ TextToggleButton::TextToggleButton () : TextToggleButton (0.0, 0.0, 50.0, 50.0, 
 TextToggleButton::TextToggleButton (const double x, const double y, const double width, const double height, const std::string& name, const double defaultValue) :
 		ToggleButton (x, y, width, height, name, defaultValue), buttonLabel (0, 0, width - 2, height - 2, name)
 {
+	buttonLabel.setClickable  (false);
 	setValue (defaultValue);
 	add (buttonLabel);
 }

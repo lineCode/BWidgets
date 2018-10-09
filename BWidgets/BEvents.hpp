@@ -171,7 +171,8 @@ class PointerEvent : public Event
 {
 public:
 	PointerEvent ();
-	PointerEvent (void* widget, const EventType type, const double x, const double y, const InputDevice button);
+	PointerEvent (void* widget, const EventType type, const double x, const double y, const double deltaX, const double deltaY,
+				  const InputDevice button);
 
 	/**
 	 * Redefines the x coordinate of the pointer event
@@ -197,6 +198,10 @@ public:
 	 */
 	double getY () const;
 
+	double getDeltaX () const;
+
+	double getDeltaY () const;
+
 	/**
 	 * Redefines the button pressed of the pointer event
 	 * @param button Button pressed
@@ -212,6 +217,8 @@ public:
 protected:
 	double xpos;
 	double ypos;
+	double deltaX;
+	double deltaY;
 	InputDevice buttonNr;
 };
 /*

@@ -25,7 +25,7 @@ Widget::Widget () : Widget (0.0, 0.0, 200.0, 200.0, "Widget") {}
 Widget::Widget (const double x, const double y, const double width, const double height) : Widget (x, y, width, height, "Widget") {}
 
 Widget::Widget(const double x, const double y, const double width, const double height, const std::string& name) :
-		x_ (x), y_ (y), width_ (width), height_ (height), visible (true), clickable (false),
+		x_ (x), y_ (y), width_ (width), height_ (height), visible (true), clickable (true), dragable (false),
 		main_ (nullptr), parent_ (nullptr), children_ (), border_ (BStyles::noBorder), background_ (BStyles::blackFill), name_ (name)
 {
 	cbfunction.fill (Widget::defaultCallback);
@@ -205,6 +205,10 @@ void Widget::setClickable (const bool status) {clickable = status;}
 
 bool Widget::isClickable () const {return clickable;}
 
+void Widget::setDragable (const bool status) {dragable = status;}
+
+bool Widget::isDragable () const {return dragable;}
+
 void Widget::update ()
 {
 	draw (0, 0, width_, height_);
@@ -213,7 +217,7 @@ void Widget::update ()
 
 bool Widget::isPointInWidget (const double x, const double y) const {return ((x >= 0.0) && (x <= width_) && (y >= 0.0) && (y <= height_));}
 
-Widget* Widget::getWidgetAt (const double x, const double y, const bool checkVisibility, const bool checkClickability)
+Widget* Widget::getWidgetAt (const double x, const double y, const bool checkVisibility, const bool checkClickability, const bool checkDragability)
 {
 	if (main_ && isPointInWidget (x, y) && ((!checkVisibility) || visible))
 	{
@@ -222,7 +226,7 @@ Widget* Widget::getWidgetAt (const double x, const double y, const bool checkVis
 		{
 			double xNew = x - w->x_;
 			double yNew = y - w->y_;
-			Widget* nextw = w->getWidgetAt (xNew, yNew, checkVisibility, checkClickability);
+			Widget* nextw = w->getWidgetAt (xNew, yNew, checkVisibility, checkClickability, checkDragability);
 			if (nextw)
 			{
 				finalw = nextw;
@@ -272,7 +276,13 @@ void Widget::onClose () {} // Empty, only Windows handle close events
 void Widget::onButtonPressed (BEvents::PointerEvent* event) {cbfunction[BEvents::EventType::BUTTON_PRESS_EVENT] (event);}
 void Widget::onButtonReleased (BEvents::PointerEvent* event) {cbfunction[BEvents::EventType::BUTTON_RELEASE_EVENT] (event);}
 void Widget::onPointerMotion (BEvents::PointerEvent* event) {cbfunction[BEvents::EventType::POINTER_MOTION_EVENT] (event);}
-void Widget::onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event) {cbfunction[BEvents::EventType::POINTER_MOTION_WHILE_BUTTON_PRESSED_EVENT] (event);}
+
+void Widget::onPointerMotionWhileButtonPressed (BEvents::PointerEvent* event)
+{
+	moveTo (x_ + event->getDeltaX (), y_ + event->getDeltaY ());
+	cbfunction[BEvents::EventType::POINTER_MOTION_WHILE_BUTTON_PRESSED_EVENT] (event);
+}
+
 void Widget::onValueChanged (BEvents::ValueChangedEvent* event) {cbfunction[BEvents::EventType::VALUE_CHANGED_EVENT] (event);}
 
 void Widget::defaultCallback (BEvents::Event* event) {}
@@ -286,18 +296,18 @@ void Widget::passProperties (Widget* child)
 	}
 }
 
-void Widget::postRedisplay () {postRedisplay (0, 0, width_, height_);}
+void Widget::postRedisplay () {postRedisplay (getOriginX (), getOriginY (), width_, height_);}
 
-void Widget::postRedisplay (const double x, const double y, const double width, const double height)
+void Widget::postRedisplay (const double xabs, const double yabs, const double width, const double height)
 {
 	if (main_)
 	{
-		BEvents::ExposeEvent* event = new BEvents::ExposeEvent (this, x, y, width, height);
+		BEvents::ExposeEvent* event = new BEvents::ExposeEvent (this, xabs, yabs, width, height);
 		main_->addEventToQueue (event);
 	}
 }
 
-void Widget::redisplay (cairo_surface_t* surface, double x, double y, double width, double height) // x and y are absolute coords
+void Widget::redisplay (cairo_surface_t* surface, double x, double y, double width, double height)
 {
 	if (main_ && visible && fitToArea (x, y, width, height))
 	{
@@ -459,7 +469,7 @@ bool Widget::fitToArea (double& x, double& y, double& width, double& height)
 		}
 		else
 		{
-			height = height_ - x;
+			height = height_ - y;
 		}
 	}
 
@@ -483,7 +493,7 @@ Window::Window (const double width, const double height, const std::string& titl
 	}
 
 	puglInitWindowSize (view_, width_, height_);
-	puglInitResizable (view_, true);
+	puglInitResizable (view_, false);
 	puglInitContextType (view_, PUGL_CAIRO);
 	puglIgnoreKeyRepeat (view_, true);
 	puglCreateWindow (view_, title.c_str ());
@@ -530,7 +540,7 @@ void Window::onExpose (BEvents::ExposeEvent* event)
 
 		// Create a temporal storage surface and store all children surfaces on this
 		cairo_surface_t* storageSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width_, height_);
-		redisplay (storageSurface, widget->getOriginX () + event->getX (), widget->getOriginY () + event->getY (),
+		redisplay (storageSurface, event->getX (), event->getY (),
 				   event->getWidth (), event->getHeight ());
 
 		// Copy storage surface onto pugl provided surface
@@ -629,15 +639,19 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* event)
 	switch (event->type) {
 	case PUGL_BUTTON_PRESS:
 		{
-			Widget* widget = w->getWidgetAt (event->button.x, event->button.y, true, true);
+			Widget* widget = w->getWidgetAt (event->button.x, event->button.y, true, true, false);
 			if (widget)
 			{
 				w->addEventToQueue (new BEvents::PointerEvent (widget,
 															  BEvents::BUTTON_PRESS_EVENT,
 															  event->button.x - widget->getOriginX (),
 															  event->button.y - widget->getOriginY (),
+															  0, 0,
 															  (BEvents::InputDevice) event->button.button));
 			}
+
+			w->pointerX = event->button.x;
+			w->pointerY = event->button.y;
 		}
 		break;
 
@@ -650,8 +664,12 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* event)
 															  BEvents::BUTTON_RELEASE_EVENT,
 															  event->button.x - widget->getOriginX (),
 															  event->button.y - widget->getOriginY (),
+															  0, 0,
 															  (BEvents::InputDevice) event->button.button));
 			}
+
+			w->pointerX = event->button.x;
+			w->pointerY = event->button.y;
 		}
 		break;
 
@@ -666,28 +684,38 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* event)
 				{
 					device = (BEvents::InputDevice) i;
 					Widget* widget = w->getInput (device);
-					w->addEventToQueue (new BEvents::PointerEvent (widget,
-																   BEvents::POINTER_MOTION_WHILE_BUTTON_PRESSED_EVENT,
-																   event->motion.x - widget->getOriginX (),
-																   event->motion.y - widget->getOriginY (),
-																   device));
+					if (widget->isDragable ())
+					{
+						w->addEventToQueue (new BEvents::PointerEvent (widget,
+																	   BEvents::POINTER_MOTION_WHILE_BUTTON_PRESSED_EVENT,
+																	   event->motion.x - widget->getOriginX (),
+																	   event->motion.y - widget->getOriginY (),
+																	   event->motion.x - w->pointerX,
+																	   event->motion.y - w->pointerY,
+																	   device));
+					}
 				}
 			}
 
 			// No button associated with a widget? Only POINTER_MOTION_EVENT
 			if (device == BEvents::NO_BUTTON)
 			{
-				Widget* widget = w->getWidgetAt (event->motion.x, event->motion.y, true, false);
+				Widget* widget = w->getWidgetAt (event->motion.x, event->motion.y, true, false, false);
 				if (widget)
 				{
 					w->addEventToQueue (new BEvents::PointerEvent (widget,
 																   BEvents::POINTER_MOTION_EVENT,
 																   event->motion.x - widget->getOriginX (),
 																   event->motion.y - widget->getOriginY (),
+																   event->motion.x - w->pointerX,
+																   event->motion.y - w->pointerY,
 																   device));
 				}
 
 			}
+
+			w->pointerX = event->motion.x;
+			w->pointerY = event->motion.y;
 		}
 		break;
 
