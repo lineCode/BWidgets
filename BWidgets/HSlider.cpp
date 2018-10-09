@@ -58,7 +58,7 @@ void HSlider::onButtonPressed (BEvents::PointerEvent* event)
 		// Pointer within the scale area ? Set value!
 		if ((x >= width_ / 2 - w / 2) && (x <= width_  / 2 + w / 2 - 1) && (y >= 0) && (y <= height_ - 1))
 		{
-			double frac = (x - width_ / 2 + w / 2) / w;
+			double frac = (x - width_ / 2 + w / 2) / (w - 1);
 			if (getStep () < 0) frac = 1 - frac;
 
 			double min = getMin ();

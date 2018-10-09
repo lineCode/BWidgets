@@ -55,9 +55,9 @@ void VSlider::onButtonPressed (BEvents::PointerEvent* event)
 		double h = (height_ / width_ >= 2 ? height_ - 2 * w : height_ - (height_ / width_) * w);
 
 		// Pointer within the scale area ? Set value!
-		if ((y >= height_/2 - h/2) && (y <= height_/2 + h/2 -1) && (x >= 0) && (x <= width_ - 1))
+		if ((y >= height_/2 - h/2) && (y <= height_/2 + h/2 - 1) && (x >= 0) && (x <= width_ - 1))
 		{
-			double frac = (y - height_/2 + h/2) / h;
+			double frac = (y - height_/2 + h/2) / (h - 1);
 			if (getStep () >= 0) frac = 1 - frac;
 
 			double min = getMin ();
