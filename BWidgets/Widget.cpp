@@ -58,7 +58,7 @@ void Widget::add (Widget& child)
 	passProperties (&child);
 	children_.push_back (&child);
 
-	if (isVisible ()) postRedisplay ();
+	if (isVisible ()) update ();	//TODO all children need to be redrawn if they also gain visibility following addition
 }
 
 void Widget::release (Widget* child)
@@ -493,7 +493,7 @@ Window::Window (const double width, const double height, const std::string& titl
 	}
 
 	puglInitWindowSize (view_, width_, height_);
-	puglInitResizable (view_, false);
+	puglInitResizable (view_, true);
 	puglInitContextType (view_, PUGL_CAIRO);
 	puglIgnoreKeyRepeat (view_, true);
 	puglCreateWindow (view_, title.c_str ());
@@ -522,7 +522,6 @@ void Window::run ()
 	while (!quit_)
 	{
 		puglWaitForEvent (view_);
-		puglProcessEvents (view_);
 		handleEvents ();
 	}
 }
@@ -551,8 +550,6 @@ void Window::onExpose (BEvents::ExposeEvent* event)
 		cairo_restore (cr);
 
 		cairo_surface_destroy (storageSurface);
-
-
 	}
 }
 
@@ -574,6 +571,8 @@ Widget* Window::getInput (BEvents::InputDevice device) const
 
 void Window::handleEvents ()
 {
+	puglProcessEvents (view_);
+
 	while (eventQueue.size () > 0)
 	{
 		BEvents::Event* event = eventQueue.front ();
@@ -719,6 +718,9 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* event)
 		}
 		break;
 
+	case PUGL_CONFIGURE:
+		std::cerr << "Configure event ? \n";
+		break;
 	case PUGL_EXPOSE:
 		w->postRedisplay ();
 		break;
