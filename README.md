@@ -8,8 +8,9 @@ Version 0.1 alpha (status: testing)
 Dependencies
 ------------
 * Cairo
+* X11 (for Linux systems, for MacOS X and Windows see description)
 
-Install the developers versions of these packages first.
+Install the developers versions of these packages first. BWidgets may also be adapted to MacOS X and Windows. For these systems, take hands on and adapt the final parameter in line 2 of the makefile. 
 
 Installation
 ------------
