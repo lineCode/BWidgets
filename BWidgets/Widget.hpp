@@ -498,7 +498,7 @@ protected:
 	/**
 	 * Stores either nullptr or (a pointer to) the widget that emitted the
 	 * BEvents::BUTTON_PRESS_EVENT until a BEvents::BUTTON_RELEASE_EVENT or
-	 * TODO the linked widget is released or destroyed.
+	 * the linked widget is released or destroyed.
 	 */
 	std::array<Widget*, BEvents::InputDevice::NR_OF_BUTTONS> input;
 	std::vector<BEvents::Event*> eventQueue;

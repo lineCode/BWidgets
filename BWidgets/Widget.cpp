@@ -46,6 +46,7 @@ Widget::Widget (const Widget& that) :
 
 Widget::~Widget()
 {
+	//TODO Release this widget (and its children) if still linked
 	cairo_surface_destroy (widgetSurface);
 }
 
