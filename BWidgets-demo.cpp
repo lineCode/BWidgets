@@ -71,12 +71,18 @@ int main ()
 	Widget.setDragable (true);
 
 	// Label widgets
-	BWidgets::Label Label1 = BWidgets::Label (100, 160, 340, 16, "This is a long text and it will be hidden partially!");
+	BWidgets::Label Label1 = BWidgets::Label (100, 120, 340, 16, "This is a long text and it will be hidden partially!");
 	Label1.applyTheme (defaultTheme, "Label");
-	BWidgets::Label Label2 = BWidgets::Label (100, 180, 340, 16, "This is a long text and it will be shown fully!");
+	BWidgets::Label Label2 (Label1);
 	Label2.applyTheme (defaultTheme, "Label");
-	BWidgets::Label Label3 = BWidgets::Label (10, 10, 240, 16, "This is a too long text and it will be clipped!");
+	Label2.moveTo (100,140);
+	BWidgets::Label Label2a = Label1;
+	Label2a.applyTheme (defaultTheme, "Label");
+	Label2a.moveTo (100,160);
+	BWidgets::Label Label3 = BWidgets::Label (100, 180, 340, 16, "This is a long text and it will be shown fully!");
 	Label3.applyTheme (defaultTheme, "Label");
+	BWidgets::Label Label4 = BWidgets::Label (10, 10, 240, 16, "This is a too long text and it will be clipped!");
+	Label4.applyTheme (defaultTheme, "Label");
 
 	// Slider widgets
 	BWidgets::VSlider Slider1 = BWidgets::VSlider (10, 10, 20, 240, "Slider", 80.0, 0.0, 100.0, 0.0);
@@ -88,7 +94,7 @@ int main ()
 	BWidgets::HSlider Slider4 = BWidgets::HSlider (100, 40, 240, 20, "Slider", 80.0, 0.0, 100.0, -0.01);
 	Slider4.applyTheme (defaultTheme);
 	BWidgets::HSliderWithValueDisplay Slider5 = BWidgets::HSliderWithValueDisplay (100, 70, 240, 20, "DialVal",
-																				   80.0, 0.0, 100.0, 1.0, "%4.0f", BWidgets::ON_RIGHT);
+																				   80.0, 0.0, 100.0, 0.0, "%4.0f", BWidgets::ON_RIGHT);
 	Slider5.applyTheme (defaultTheme);
 	BWidgets::VSliderWithValueDisplay Slider6 = BWidgets::VSliderWithValueDisplay (70, 10, 20, 240, "DialVal",
 																					   80.0, 0.0, 100.0, 1.0, "%4.0f", BWidgets::ON_TOP);
@@ -116,6 +122,7 @@ int main ()
 	BWidgets::DrawingSurface Surface = BWidgets::DrawingSurface (20, 340, 320, 60, "Frame");
 	Surface.applyTheme (defaultTheme);
 	Surface.getBorder ()->setRadius (0.0);
+	Surface.getBackground ()->getColor ()->setAlpha (0.5);
 	cairo_t* cr = cairo_create (Surface.getDrawingSurface ());
 	cairo_set_line_width (cr, 3.0);
 	cairo_set_source_rgba (cr, 1.0, 1.0, 0.0, 1.0);
@@ -147,7 +154,12 @@ int main ()
 	MainWindow->add (Widget2);
 	Widget2.add (Label1);
 	Widget2.add (Label2);
+	Widget2.add (Label2a);
 	Widget2.add (Label3);
+	Widget2.add (Label4);
+
+	// Add the drawing surface widget directly to the main window
+	MainWindow->add (Surface);
 
 	// Add the foreground widget container to the main window and all sliders,
 	// buttons and dials to the foreground widget container
@@ -166,10 +178,9 @@ int main ()
 	Widget.add (Button3);
 	Widget.add (Button4);
 	Dial2.setCallbackFunction (BEvents::EventType::VALUE_CHANGED_EVENT, showValue);
-	Label3.moveTo (150, 200);
+	Label4.moveTo (150, 200);
 
-	// Add the drawing surface widget directly to the main window
-	MainWindow->add (Surface);
+	Surface.moveFrontwards ();
 
 	// Run until main window is closed
 	MainWindow->run ();
