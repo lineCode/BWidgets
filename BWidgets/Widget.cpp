@@ -34,9 +34,38 @@ Widget::Widget(const double x, const double y, const double width, const double 
 	draw (0, 0, width_, height_);
 }
 
+Widget::Widget (const Widget& that) :
+		x_ (that.x_), y_ (that.y_), width_ (that.width_), height_ (that.height_),
+		visible (that.visible), clickable (that.clickable), dragable (that.dragable),
+		main_ (nullptr), parent_ (nullptr), children_ (), border_ (that.border_), background_ (that.background_), name_ (that.name_),
+		cbfunction (that.cbfunction)
+{
+	widgetSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, that.width_, that.height_);
+	draw (0, 0, width_, height_);
+}
+
 Widget::~Widget()
 {
 	cairo_surface_destroy (widgetSurface);
+}
+
+Widget& Widget::operator= (const Widget& that)
+{
+	x_ = that.x_;
+	y_ = that.y_;
+	width_ = that.width_;
+	height_ = that.height_;
+	visible = that.visible;
+	clickable = that.clickable;
+	dragable = that.dragable;
+	border_ = that.border_;
+	background_ = that.background_;
+	cbfunction = that.cbfunction;
+
+	if (widgetSurface) cairo_surface_destroy (widgetSurface);
+	widgetSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, that.width_, that.height_);
+	update ();
+	return *this;
 }
 
 void Widget::show ()
@@ -143,6 +172,66 @@ void Widget::moveTo (const double x, const double y)
 	}
 }
 
+double Widget::getX () const {return x_;}
+
+double Widget::getY () const {return y_;}
+
+double Widget::getOriginX ()
+{
+	double x = 0.0;
+	for (Widget* w = this; w->parent_; w = w->parent_) x += w->x_;
+	return x;
+}
+
+double Widget::getOriginY ()
+{
+	double y = 0.0;
+	for (Widget* w = this; w->parent_; w = w->parent_) y += w->y_;
+	return y;
+}
+
+void Widget::moveFrontwards ()
+{
+	if (parent_)
+	{
+		int size = parent_->children_.size ();
+		for (int i = 0; (i + 1) < size; ++i)
+		{
+			if (parent_->children_[i] == this)
+			{
+				// Swap
+				Widget* w = parent_->children_[i + 1];
+				parent_->children_[i + 1] = parent_->children_[i];
+				parent_->children_[i] = w;
+
+				if (parent_->isVisible ()) parent_->postRedisplay ();
+				return;
+			}
+		}
+	}
+}
+
+void Widget::moveBackwards ()
+{
+	if (parent_)
+	{
+		int size = parent_->children_.size ();
+		for (int i = 1; i < size; ++i)
+		{
+			if (parent_->children_[i] == this)
+			{
+				// Swap
+				Widget* w = parent_->children_[i];
+				parent_->children_[i] = parent_->children_[i - 1];
+				parent_->children_[i - 1] = w;
+
+				if (parent_->isVisible ()) parent_->postRedisplay ();
+				return;
+			}
+		}
+	}
+}
+
 void Widget::setWidth (const double width)
 {
 	if (width_ != width)
@@ -168,6 +257,9 @@ void Widget::setWidth (const double width)
 		}
 	}
 }
+
+double Widget::getWidth () const {return width_;}
+
 void Widget::setHeight (const double height)
 {
 	if (height_ != height)
@@ -194,6 +286,8 @@ void Widget::setHeight (const double height)
 	}
 }
 
+double Widget::getHeight () const {return height_;}
+
 void Widget::setBorder (const BStyles::Border& border)
 {
 	border_ = border;
@@ -208,7 +302,14 @@ void Widget::setBackground (const BStyles::Fill& background)
 	update ();
 }
 
+BStyles::Fill* Widget::getBackground () {return &background_;}
+
 Widget* Widget::getParent () const {return parent_;}
+
+bool Widget::hasChildren () const {return (children_.size () > 0 ? true : false);}
+
+std::vector<Widget*> Widget::getChildren () const {return children_;}
+
 std::string Widget::getName () const {return name_;}
 
 void Widget::setCallbackFunction (const BEvents::EventType eventType, const std::function<void (BEvents::Event*)>& callbackFunction)
@@ -262,20 +363,6 @@ Widget* Widget::getWidgetAt (const double x, const double y, const bool checkVis
 	else return nullptr;
 }
 
-double Widget::getOriginX ()
-{
-	double x = 0.0;
-	for (Widget* w = this; w->parent_; w = w->parent_) x += w->x_;
-	return x;
-}
-
-double Widget::getOriginY ()
-{
-	double y = 0.0;
-	for (Widget* w = this; w->parent_; w = w->parent_) y += w->y_;
-	return y;
-}
-
 void Widget::applyTheme (BStyles::Theme& theme) {applyTheme (theme, name_);}
 
 void Widget::applyTheme (BStyles::Theme& theme, const std::string& name)
@@ -294,7 +381,7 @@ void Widget::applyTheme (BStyles::Theme& theme, const std::string& name)
 	}
 }
 
-void Widget::onConfigure () {} // Empty, only Windows handle configure events
+void Widget::onConfigure (BEvents::ExposeEvent* event) {} // Empty, only Windows handle configure events
 void Widget::onExpose (BEvents::ExposeEvent* event) {} // Empty, only Windows handle expose events
 void Widget::onClose () {} // Empty, only Windows handle close events
 void Widget::onButtonPressed (BEvents::PointerEvent* event) {cbfunction[BEvents::EventType::BUTTON_PRESS_EVENT] (event);}
@@ -327,7 +414,7 @@ void Widget::postRedisplay (const double xabs, const double yabs, const double w
 {
 	if (main_)
 	{
-		BEvents::ExposeEvent* event = new BEvents::ExposeEvent (this, xabs, yabs, width, height);
+		BEvents::ExposeEvent* event = new BEvents::ExposeEvent (this, BEvents::EXPOSE_EVENT, xabs, yabs, width, height);
 		main_->addEventToQueue (event);
 	}
 }
@@ -505,7 +592,7 @@ bool Widget::fitToArea (double& x, double& y, double& width, double& height)
 
 Window::Window () : Window (200.0, 200.0, "Main Window", 0.0) {}
 
-Window::Window (const double width, const double height, const std::string& title, PuglNativeWindow nativeWindow) :
+Window::Window (const double width, const double height, const std::string& title, PuglNativeWindow nativeWindow, bool resizable) :
 		Widget (0.0, 0.0, width, height, title), title_ (title), view_ (NULL), nativeWindow_ (nativeWindow), quit_ (false),
 		input ({nullptr, nullptr, nullptr, nullptr})
 {
@@ -518,7 +605,7 @@ Window::Window (const double width, const double height, const std::string& titl
 	}
 
 	puglInitWindowSize (view_, width_, height_);
-	puglInitResizable (view_, true);
+	puglInitResizable (view_, resizable);
 	puglInitContextType (view_, PUGL_CAIRO);
 	puglIgnoreKeyRepeat (view_, true);
 	puglCreateWindow (view_, title.c_str ());
@@ -549,6 +636,12 @@ void Window::run ()
 		puglWaitForEvent (view_);
 		handleEvents ();
 	}
+}
+
+void Window::onConfigure (BEvents::ExposeEvent* event)
+{
+	if (width_ != event->getWidth ()) setWidth (event->getWidth ());
+	if (height_ != event->getHeight ()) setHeight (event->getHeight ());
 }
 
 void Window::onClose ()
@@ -610,6 +703,10 @@ void Window::handleEvents ()
 
 				switch (eventType)
 				{
+				case BEvents::CONFIGURE_EVENT:
+					onConfigure ((BEvents::ExposeEvent*) event);
+					break;
+
 				case BEvents::EXPOSE_EVENT:
 					onExpose ((BEvents::ExposeEvent*) event);
 					break;
@@ -744,14 +841,22 @@ void Window::translatePuglEvent (PuglView* view, const PuglEvent* event)
 		break;
 
 	case PUGL_CONFIGURE:
-		std::cerr << "Configure event ? \n";
+		w->addEventToQueue (new BEvents::ExposeEvent (w,
+													  BEvents::CONFIGURE_EVENT,
+													  event->configure.x,
+													  event->configure.y,
+													  event->configure.width,
+													  event->configure.height));
 		break;
+
 	case PUGL_EXPOSE:
 		w->postRedisplay ();
 		break;
+
 	case PUGL_CLOSE:
 		w->addEventToQueue (new BEvents::Event (w, BEvents::CLOSE_EVENT));
 		break;
+
 	default: break;
 	}
 

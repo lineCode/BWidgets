@@ -37,9 +37,9 @@ EventType Event::getEventType () const {return eventType;}
  * Class BEvents::ExposeEvent
  *****************************************************************************/
 
-ExposeEvent::ExposeEvent () : ExposeEvent ((void*) nullptr, 0, 0, 0, 0) {}
-ExposeEvent::ExposeEvent (void* widget, const double x, const double y, const double width, const double height) :
-		Event (widget, EXPOSE_EVENT), exposeX0 (x), exposeY0 (y), exposeHeight (height), exposeWidth (width) {}
+ExposeEvent::ExposeEvent () : ExposeEvent ((void*) nullptr, NO_EVENT, 0, 0, 0, 0) {}
+ExposeEvent::ExposeEvent (void* widget, const EventType type, const double x, const double y, const double width, const double height) :
+		Event (widget, type), exposeX0 (x), exposeY0 (y), exposeHeight (height), exposeWidth (width) {}
 void ExposeEvent::setX (const double x) {exposeX0 = x;}
 double ExposeEvent::getX () const {return exposeX0;}
 void ExposeEvent::setY (const double y) {exposeY0 = y;}

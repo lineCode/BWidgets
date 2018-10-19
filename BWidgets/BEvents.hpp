@@ -96,7 +96,7 @@ class ExposeEvent : public Event
 {
 public:
 	ExposeEvent ();
-	ExposeEvent (void* widget, const double x, const double y, const double width, const double heigth);
+	ExposeEvent (void* widget, const EventType type, const double x, const double y, const double width, const double heigth);
 
 	/**
 	 * Redefines the x coordinate of the output region for the expose event

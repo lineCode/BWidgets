@@ -51,9 +51,23 @@ public:
 	Widget ();
 	Widget (const double x, const double y, const double width, const double height);
 	Widget (const double x, const double y, const double width, const double height, const std::string& name);
-	// TODO Widget (const Widget& that);
-	// TODO Widget& operator= (const Widget& that);
+
+	/**
+	 * Creates a new (orphan) widget and copies the widget properties from a
+	 * source widget. This method doesn't copy any parent or child widgets.
+	 * @param that Source widget
+	 */
+	Widget (const Widget& that);
+
 	virtual ~Widget ();
+
+	/**
+	 * Assignment. Copies the widget properties from a source widget and keeps
+	 * its position within the widget tree. Emits a BEvents::ExposeEvent if the
+	 * widget is visible.
+	 * @param that Source widget
+	 */
+	Widget& operator= (const Widget& that);
 
 	/**
 	 * Makes the widget visible (if its parents are visible too) and emits an
@@ -91,10 +105,17 @@ public:
 	 */
 	void moveTo (const double x, const double y);
 
-	//TODO double getX ();
-	//TODO double getY ();
-	//TODO moveBackwards ();
-	//TODO moveFrontwards ();
+	/**
+	 * Gets the widgets x position
+	 * @return X position
+	 */
+	double getX () const;
+
+	/**
+	 * Gets the widgets y position
+	 * @return Y position
+	 */
+	double getY () const;
 
 	/**
 	 * Gets the widgets x position relative to the position of its main window.
@@ -108,6 +129,17 @@ public:
 	 */
 	double getOriginY ();
 
+	/**
+	 * Pushes this widget backwards (to the background) if it is linked to a
+	 * parent widget. Emits a BEvents::ExposeEvent if the widget is visible.
+	 */
+	void moveBackwards ();
+
+	/**
+	 * Pulls this widget frontwards (to the front) if it is linked to a
+	 * parent widget. Emits a BEvents::ExposeEvent if the widget is visible.
+	 */
+	void moveFrontwards ();
 
 	/**
 	 * Resizes the widget, redraw and emits a BEvents::ExposeEvent if the
@@ -116,7 +148,11 @@ public:
 	 */
 	void setWidth (const double width);
 
-	//TODO double getWidth ();
+	/**
+	 * Gets the width of the widget
+	 * @return Width
+	 */
+	double getWidth () const;
 
 	/**
 	 * Resizes the widget, redraw and emits a BEvents::ExposeEvent if the
@@ -125,7 +161,11 @@ public:
 	 */
 	void setHeight (const double height);
 
-	//TODO double getHeight ();
+	/**
+	 * Gets the height of the widget
+	 * @return Height
+	 */
+	double getHeight () const;
 
 	/**
 	 * (Re-)Defines the border of the widget. Redraws widget and emits a
@@ -147,7 +187,11 @@ public:
 	 */
 	void setBackground (const BStyles::Fill& background);
 
-	//TODO BStyles::Fill* getBackground ();
+	/**
+	 * Gets (a pointer to) the background of the widget.
+	 * @return Pointer to BStyles::Fill
+	 */
+	BStyles::Fill* getBackground ();
 
 	/**
 	 * Gets a pointer to the widgets parent widget.
@@ -156,8 +200,18 @@ public:
 	 */
 	Widget* getParent () const;
 
-	//TODO bool hasChildren ();
-	//TODO std::vector<Widget*>* getChildren;
+	/**
+	 * Tests whether the widget has children or not.
+	 * @return TRUE if the widget has children, otherwise FALSE
+	 */
+	bool hasChildren () const;
+
+	/**
+	 * Gets the widgets children vector. The vector contains all children of
+	 * the widgets from background to foreground.
+	 * @return Children vector.
+	 */
+	std::vector<Widget*> getChildren () const;
 
 	/**
 	 * Gets the name of the widget
@@ -238,7 +292,7 @@ public:
 	 * BEvents::EventType::CONFIGURE_EVENTs will only be handled by
 	 * BWidget::Window.
 	 */
-	virtual void onConfigure ();
+	virtual void onConfigure (BEvents::ExposeEvent* event);
 
 	/**
 	 * Predefined empty method to handle a BEvents::EventType::EXPOSE_EVENT.
@@ -352,10 +406,13 @@ class Window : public Widget
 {
 public:
 	Window ();
-	Window (const double width, const double height, const std::string& title, PuglNativeWindow nativeWindow);
-	//TODO Window (const Window& that);
-	//TODO Window& operator= (const Window& that);
+	Window (const double width, const double height, const std::string& title, PuglNativeWindow nativeWindow, bool resizable = false);
+
+	Window (const Window& that) = delete;	// Only one window in this version
+
 	~Window ();
+
+	Window& operator= (const Window& that) = delete;	// Only one Window in this version
 
 	/**
 	 * Gets in contact to the host system via Pugl
@@ -395,6 +452,13 @@ public:
 	virtual void onExpose (BEvents::ExposeEvent* event) override;
 
 	/**
+	 * Predefined empty method to handle a BEvents::EventType::CONFIGURE_EVENT.
+	 * BEvents::EventType::CONFIGURE_EVENTs will only be handled by
+	 * BWidget::Window.
+	 */
+	virtual void onConfigure (BEvents::ExposeEvent* event) override;
+
+	/**
 	 * Sets the close flag and thus ends the run method.
 	 */
 	virtual void onClose () override;
@@ -414,8 +478,6 @@ public:
 	Widget* getInput (BEvents::InputDevice device) const;
 
 protected:
-
-
 
 	/**
 	 * Communication interface to the host via Pugl. Translates PuglEvents to
