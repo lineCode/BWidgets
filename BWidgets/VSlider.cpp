@@ -94,7 +94,9 @@ void VSlider::draw (const double x, const double y, const double width, const do
 			double h = (height_ / width_ >= 2 ? height_ - 2 * w : height_ - (height_ / width_) * w);
 
 			// Relative Value (0 .. 1) for calculation of value line
-			double relVal = (getValue () - getMin ()) / (getMax () - getMin ());
+			double relVal;
+			if (getMax () != getMin ()) relVal = (getValue () - getMin ()) / (getMax () - getMin ());
+			else relVal = 0.5;							// min == max doesn't make any sense, but need to be handled
 			if (getStep() < 0) relVal = 1 - relVal;		// Swap if reverse orientation
 
 			double x1 = width_ / 2 - w / 2; double y1 = height_ / 2 - h / 2;									// Top left

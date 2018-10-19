@@ -64,7 +64,7 @@ void Dial::onButtonPressed (BEvents::PointerEvent* event)
 				if (angle > 1.7 * PI) corrAngle = 1.7 * PI;
 				double frac = (corrAngle - 0.3 * PI) / (1.4 * PI);
 				if (getStep () < 0) frac = 1 - frac;
-				setValue (getMin () + frac * (getMax () - getMin ()));	//TODO DIV by 0 if min == max
+				setValue (getMin () + frac * (getMax () - getMin ()));
 
 			}
 		}
@@ -96,7 +96,9 @@ void Dial::draw (const double x, const double y, const double width, const doubl
 			cairo_clip (cr);
 
 			// Relative Value (0 .. 1) for calculation of value line
-			double relVal = (getValue () - getMin ()) / (getMax () - getMin ());	//TODO DIV by 0 if min == max
+			double relVal;
+			if (getMax () != getMin ()) relVal = (getValue () - getMin ()) / (getMax () - getMin ());
+			else relVal = 0.5;							// min == max doesn't make any sense, but need to be handled
 			if (getStep() < 0) relVal = 1 - relVal;		// Swap if reverse orientation
 
 			// Colors uses within this method
