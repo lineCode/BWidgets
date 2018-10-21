@@ -3,10 +3,31 @@
 namespace BWidgets
 {
 Label::Label () : Label (0.0, 0.0, 0.0, 0.0, "Label") {}
+
 Label::Label (const std::string& text) : Label (0.0, 0.0, 200.0, 20.0, text) {}
+
 Label::Label (const double x, const double y, const double width, const double height, const std::string& text) :
 		Widget (x, y, width, height, text), labelColors (BColors::whites), labelFont (BStyles::sans12pt), labelText (text) {}
+
+Label::Label (const Label& that) : Widget (that)
+{
+	labelColors = that.labelColors;
+	labelFont = that.labelFont;
+	labelText = that.labelText;
+
+	draw (0, 0, width_, height_);
+}
+
 Label::~Label () {}
+
+Label& Label::operator= (const Label& that)
+{
+	labelColors = that.labelColors;
+	labelFont = that.labelFont;
+	labelText = that.labelText;
+	Widget::operator= (that);
+	return *this;
+}
 
 void Label::setText (const std::string& text)
 {

@@ -16,7 +16,23 @@ public:
 	DialWithValueDisplay ();
 	DialWithValueDisplay (const double x, const double y, const double width, const double height, const std::string& name,
 						  const double value, const double min, const double max, const double step, const std::string& valueFormat);
+
+	/**
+	 * Creates a new (orphan) dial and copies the dial properties from a
+	 * source dial. This method doesn't copy any parent or child widgets.
+	 * @param that Source dial
+	 */
+	DialWithValueDisplay (const DialWithValueDisplay& that);
+
 	~DialWithValueDisplay ();
+
+	/**
+	 * Assignment. Copies the dial properties from a source dial and keeps
+	 * its name and its position within the widget tree. Emits an expose event
+	 * if the widget is visible and a value changed event.
+	 * @param that Source widget
+	 */
+	DialWithValueDisplay& operator= (const DialWithValueDisplay& that);
 
 	/**
 	 * Changes the value of the widget and keeps it within the defined range.

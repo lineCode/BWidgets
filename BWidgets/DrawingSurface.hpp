@@ -17,7 +17,24 @@ class DrawingSurface : public Widget
 public:
 	DrawingSurface ();
 	DrawingSurface (const double x, const double y, const double width, const double height, const std::string& name);
+
+	/**
+	 * Creates a new (orphan) drawing surface widget and copies the widget
+	 * properties from a source drawing surface widget. This method doesn't
+	 * copy any parent or child widgets.
+	 * @param that Source drawing surface widget
+	 */
+	DrawingSurface (const DrawingSurface& that);
+
 	~DrawingSurface ();
+
+	/**
+	 * Assignment. Copies the widget properties from a source widget and keeps
+	 * its name and its position within the widget tree. Emits a
+	 * BEvents::ExposeEvent if the widget is visible.
+	 * @param that Source widget
+	 */
+	DrawingSurface& operator= (const DrawingSurface& that);
 
 	/**
 	 * Gets the colors of the button

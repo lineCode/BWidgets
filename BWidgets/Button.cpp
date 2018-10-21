@@ -5,12 +5,21 @@ namespace BWidgets
 Button::Button () : Button (0.0, 0.0, 50.0, 50.0, "button", 0.0) {}
 
 Button::Button (const double x, const double y, const double width, const double height, const std::string& name, const double defaultValue) :
-		ValueWidget (x, y, width, height, name, defaultValue)
+		ValueWidget (x, y, width, height, name, defaultValue), buttonColors (BColors::greys)
 {
 	setClickable (true);
 }
 
+Button::Button (const Button& that) : ValueWidget (that), buttonColors (that.buttonColors) {}
+
 Button:: ~Button () {}
+
+Button& Button::operator= (const Button& that)
+{
+	buttonColors = that.buttonColors;
+	ValueWidget::operator= (that);
+	return *this;
+}
 
 void Button::setButtonColors (const BColors::ColorSet& colors)
 {

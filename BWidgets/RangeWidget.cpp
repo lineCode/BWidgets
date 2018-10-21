@@ -16,7 +16,21 @@ RangeWidget::RangeWidget (const double  x, const double y, const double width, c
 	this->value = LIMIT (value, min, max);
 }
 
+RangeWidget::RangeWidget (const RangeWidget& that) :
+	ValueWidget (that), rangeMin (that.rangeMin <= that.rangeMax ? that.rangeMin : that.rangeMax), rangeMax (that.rangeMax), rangeStep (that.rangeStep) {}
+
 RangeWidget::~RangeWidget () {}
+
+RangeWidget& RangeWidget::operator= (const RangeWidget& that)
+{
+	Widget::operator= (that);
+	rangeMin = that.rangeMin;
+	rangeMax = that.rangeMax;
+	rangeStep = that.rangeStep;
+	setValue (that.value);
+
+	return *this;
+}
 
 void RangeWidget::setValue (const double val)
 {

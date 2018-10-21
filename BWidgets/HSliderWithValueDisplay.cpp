@@ -20,6 +20,25 @@ HSliderWithValueDisplay::HSliderWithValueDisplay (const double x, const double y
 	add (valueDisplay);
 }
 
+HSliderWithValueDisplay::HSliderWithValueDisplay (const HSliderWithValueDisplay& that) :
+		RangeWidget (that),
+		slider (that.slider), valueDisplay (that.valueDisplay), valFormat (that.valFormat), valPosition (that.valPosition)
+{
+	add (slider);
+	add (valueDisplay);
+}
+
+HSliderWithValueDisplay& HSliderWithValueDisplay::operator= (const HSliderWithValueDisplay& that)
+{
+	valFormat = that.valFormat;
+	valPosition = that.valPosition;
+	RangeWidget::operator= (that);
+	slider = that.slider;
+	valueDisplay = that.valueDisplay;
+
+	return *this;
+}
+
 void HSliderWithValueDisplay::setValue (const double val)
 {
 	RangeWidget::setValue (val);

@@ -20,7 +20,27 @@ VSliderWithValueDisplay::VSliderWithValueDisplay (const double x, const double y
 	add (valueDisplay);
 }
 
+VSliderWithValueDisplay::VSliderWithValueDisplay (const VSliderWithValueDisplay& that) :
+		RangeWidget (that),
+		slider (that.slider), valueDisplay (that.valueDisplay), valFormat (that.valFormat), valPosition (that.valPosition)
+{
+	add (slider);
+	add (valueDisplay);
+}
+
 VSliderWithValueDisplay::~VSliderWithValueDisplay () {}
+
+VSliderWithValueDisplay& VSliderWithValueDisplay::operator= (const VSliderWithValueDisplay& that)
+{
+	valFormat = that.valFormat;
+	valPosition = that.valPosition;
+	RangeWidget::operator= (that);
+	slider = that.slider;
+	valueDisplay = that.valueDisplay;
+
+
+	return *this;
+}
 
 void VSliderWithValueDisplay::setValue (const double val)
 {

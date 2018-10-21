@@ -34,7 +34,23 @@ public:
 	VSliderWithValueDisplay (const double x, const double y, const double width, const double height, const std::string& name,
 			  	  	  	  	 const double value, const double min, const double max, const double step,
 							 const std::string& valueFormat, const ValueDisplayPosition position);
+
+	/**
+	 * Creates a new (orphan) slider and copies the slider properties from a
+	 * source slider. This method doesn't copy any parent or child widgets.
+	 * @param that Source slider
+	 */
+	VSliderWithValueDisplay (const VSliderWithValueDisplay& that);
+
 	~VSliderWithValueDisplay ();
+
+	/**
+	 * Assignment. Copies the slider properties from a source slider and keeps
+	 * its name and its position within the widget tree. Emits an expose event
+	 * if the widget is visible and a value changed event.
+	 * @param that Source slider
+	 */
+	VSliderWithValueDisplay& operator= (const VSliderWithValueDisplay& that);
 
 	/**
 	 * Changes the value of the widget and keeps it within the defined range.

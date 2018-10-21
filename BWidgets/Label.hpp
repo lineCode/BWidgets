@@ -17,7 +17,23 @@ public:
 	Label ();
 	Label (const std::string& text);
 	Label (const double x, const double y, const double width, const double height, const std::string& text);
+
+	/**
+	 * Creates a new (orphan) label and copies the label properties from a
+	 * source label. This method doesn't copy any parent or child widgets.
+	 * @param that Source label
+	 */
+	Label (const Label& that);
+
 	~Label ();
+
+	/**
+	 * Assignment. Copies the label properties from a source label and keeps
+	 * its name and its position within the widget tree. Emits a
+	 * BEvents::ExposeEvent if the label is visible.
+	 * @param that Source label
+	 */
+	Label& operator= (const Label& that);
 
 	/**
 	 * Sets the output text.

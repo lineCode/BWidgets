@@ -21,7 +21,24 @@ DialWithValueDisplay::DialWithValueDisplay (const double x, const double y, cons
 	add (valueDisplay);
 }
 
+DialWithValueDisplay::DialWithValueDisplay (const DialWithValueDisplay& that) :
+		RangeWidget (that), dial (that.dial), valueDisplay (that.valueDisplay), valFormat (that.valFormat)
+{
+	add (dial);
+	add (valueDisplay);
+}
+
 DialWithValueDisplay::~DialWithValueDisplay () {}
+
+DialWithValueDisplay& DialWithValueDisplay::operator= (const DialWithValueDisplay& that)
+{
+	valFormat = that.valFormat;
+	RangeWidget::operator= (that);
+	dial = that.dial;
+	valueDisplay = that.valueDisplay;
+
+	return *this;
+}
 
 void DialWithValueDisplay::setValue (const double val)
 {

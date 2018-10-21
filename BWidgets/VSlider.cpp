@@ -16,7 +16,18 @@ VSlider::VSlider (const double  x, const double y, const double width, const dou
 	setDragable (true);
 }
 
+VSlider::VSlider (const VSlider& that) : RangeWidget (that), fgColors (that.fgColors), bgColors (that.bgColors) {}
+
 VSlider::~VSlider () {}
+
+VSlider& VSlider::operator= (const VSlider& that)
+{
+	fgColors = that.fgColors;
+	bgColors = that.bgColors;
+	RangeWidget::operator= (that);
+
+	return *this;
+}
 
 void VSlider::update ()
 {

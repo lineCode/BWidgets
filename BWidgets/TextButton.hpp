@@ -18,7 +18,23 @@ class TextButton : public Button
 public:
 	TextButton ();
 	TextButton (const double x, const double y, const double width, const double height, const std::string& name, const double defaultValue);
+
+	/**
+	 * Creates a new (orphan) button and copies the button properties from a
+	 * source button. This method doesn't copy any parent or child widgets.
+	 * @param that Source button
+	 */
+	TextButton (const TextButton& that);
+
 	~TextButton ();
+
+	/**
+	 * Assignment. Copies the widget properties from a source button and keeps
+	 * its name and its position within the widget tree. Emits a
+	 * BEvents::ExposeEvent if the widget is visible.
+	 * @param that Source button
+	 */
+	TextButton& operator= (const TextButton& that);
 
 	/**
 	 * Changes the value of the widget (0.0 == off,  0.0 != off) and relocates

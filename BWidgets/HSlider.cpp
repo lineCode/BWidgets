@@ -16,7 +16,18 @@ HSlider::HSlider (const double  x, const double y, const double width, const dou
 	setDragable (true);
 }
 
+HSlider::HSlider (const HSlider& that) : RangeWidget (that), fgColors (that.fgColors), bgColors (that.bgColors){}
+
 HSlider::~HSlider () {}
+
+HSlider& HSlider::operator= (const HSlider& that)
+{
+	fgColors = that.fgColors;
+	bgColors = that.bgColors;
+	RangeWidget::operator= (that);
+
+	return *this;
+}
 
 void HSlider::update ()
 {

@@ -17,7 +17,23 @@ public:
 	Dial ();
 	Dial (const double x, const double y, const double width, const double height, const std::string& name,
 		  const double value, const double min, const double max, const double step);
+
+	/**
+	 * Creates a new (orphan) dial and copies the dial properties from a
+	 * source dial. This method doesn't copy any parent or child widgets.
+	 * @param that Source dial
+	 */
+	Dial (const Dial& that);
+
 	~Dial ();
+
+	/**
+	 * Assignment. Copies the dial properties from a source dial and keeps
+	 * its name and its position within the widget tree. Emits an expose event
+	 * if the widget is visible and a value changed event.
+	 * @param that Source widget
+	 */
+	Dial& operator= (const Dial& that);
 
 	/**
 	 * Calls a redraw of the widget and calls postRedisplay () if the the

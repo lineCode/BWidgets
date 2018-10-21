@@ -17,7 +17,23 @@ public:
 	HSlider ();
 	HSlider (const double x, const double y, const double width, const double height, const std::string& name,
 			 const double value, const double min, const double max, const double step);
+
+	/**
+	 * Creates a new (orphan) slider and copies the slider properties from a
+	 * source slider. This method doesn't copy any parent or child widgets.
+	 * @param that Source slider
+	 */
+	HSlider (const HSlider& that);
+
 	~HSlider ();
+
+	/**
+	 * Assignment. Copies the slider properties from a source slider and keeps
+	 * its name and its position within the widget tree. Emits an expose event
+	 * if the widget is visible and a value changed event.
+	 * @param that Source slider
+	 */
+	HSlider& operator= (const HSlider& that);
 
 	/**
 	 * Calls a redraw of the widget and calls postRedisplay () if the the

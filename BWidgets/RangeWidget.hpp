@@ -17,7 +17,23 @@ public:
 	RangeWidget ();
 	RangeWidget (const double  x, const double y, const double width, const double height, const std::string& name,
 				 const double value, const double min, const double max, const double step);
+
+	/**
+	 * Creates a new (orphan) widget and copies the widget properties from a
+	 * source widget. This method doesn't copy any parent or child widgets.
+	 * @param that Source widget
+	 */
+	RangeWidget (const RangeWidget& that);
+
 	~RangeWidget ();
+
+	/**
+	 * Assignment. Copies the widget properties from a source widget and keeps
+	 * its name and its position within the widget tree. Emits an expose event
+	 * if the widget is visible and a value changed event.
+	 * @param that Source widget
+	 */
+	RangeWidget& operator= (const RangeWidget& that);
 
 	/**
 	 * Changes the value of the widget and keeps it within the defined range.

@@ -8,11 +8,23 @@ TextToggleButton::TextToggleButton (const double x, const double y, const double
 		ToggleButton (x, y, width, height, name, defaultValue), buttonLabel (0, 0, width - 2, height - 2, name)
 {
 	buttonLabel.setClickable  (false);
-	setValue (defaultValue);
+	//setValue (defaultValue);
+	add (buttonLabel);
+}
+
+TextToggleButton::TextToggleButton (const TextToggleButton& that) : ToggleButton (that), buttonLabel (that.buttonLabel)
+{
 	add (buttonLabel);
 }
 
 TextToggleButton:: ~TextToggleButton () {}
+
+TextToggleButton& TextToggleButton::operator= (const TextToggleButton& that)
+{
+	ToggleButton::operator= (that);
+	buttonLabel = that.buttonLabel;
+	return *this;
+}
 
 void TextToggleButton::setValue (const double val)
 {

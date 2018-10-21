@@ -11,9 +11,25 @@ DrawingSurface::DrawingSurface (const double x, const double y, const double wid
 	draw (0, 0, width_, height_);
 }
 
-DrawingSurface:: ~DrawingSurface ()
+DrawingSurface::DrawingSurface (const DrawingSurface& that) :
+		Widget (that)
+{
+	drawingSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width_, height_);
+	draw (0, 0, width_, height_);
+}
+
+DrawingSurface::~DrawingSurface ()
 {
 	cairo_surface_destroy (drawingSurface);
+}
+
+DrawingSurface& DrawingSurface::operator= (const DrawingSurface& that)
+{
+	if (drawingSurface) cairo_surface_destroy (drawingSurface);
+	drawingSurface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, that.width_, that.height_);
+	Widget::operator= (that);
+
+	return *this;
 }
 
 cairo_surface_t* DrawingSurface::getDrawingSurface () {return drawingSurface;}

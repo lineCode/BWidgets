@@ -63,8 +63,8 @@ public:
 
 	/**
 	 * Assignment. Copies the widget properties from a source widget and keeps
-	 * its position within the widget tree. Emits a BEvents::ExposeEvent if the
-	 * widget is visible.
+	 * its name and its position within the widget tree. Emits a
+	 * BEvents::ExposeEvent if the widget is visible.
 	 * @param that Source widget
 	 */
 	Widget& operator= (const Widget& that);

@@ -16,7 +16,18 @@ Dial::Dial (const double x, const double y, const double width, const double hei
 	setDragable (true);
 }
 
+Dial::Dial (const Dial& that) : RangeWidget (that), fgColors (that.fgColors), bgColors (that.bgColors) {}
+
 Dial:: ~Dial () {}
+
+Dial& Dial::operator= (const Dial& that)
+{
+	fgColors = that.fgColors;
+	bgColors = that.bgColors;
+	RangeWidget::operator= (that);
+
+	return *this;
+}
 
 void Dial::update ()
 {

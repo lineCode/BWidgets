@@ -46,7 +46,12 @@ Widget::Widget (const Widget& that) :
 
 Widget::~Widget()
 {
-	//TODO Release this widget (and its children) if still linked
+	// Release from parent (and main) if still linked
+	if (parent_) parent_->release (this);
+
+	//Release children
+	for (Widget* w : children_) release (w);
+
 	cairo_surface_destroy (widgetSurface);
 }
 
@@ -125,8 +130,10 @@ void Widget::release (Widget* child)
 		if (child->main_)
 		{
 			// Release child from main window input connections
-			if (child->main_-> getInput (BEvents::LEFT_BUTTON) == child) child->main_-> setInput (BEvents::LEFT_BUTTON, nullptr);
-			if (child->main_-> getInput (BEvents::RIGHT_BUTTON) == child) child->main_-> setInput (BEvents::RIGHT_BUTTON, nullptr);
+			for (int i = (int) BEvents::NO_BUTTON; i < (int) BEvents::NR_OF_BUTTONS; ++i)
+			{
+				if (child->main_-> getInput ((BEvents::InputDevice) i) == child) child->main_-> setInput ((BEvents::InputDevice) i, nullptr);
+			}
 
 			// Remove connection to main window
 			child->main_ = nullptr;
@@ -147,7 +154,7 @@ void Widget::release (Widget* child)
 			}
 		}
 
-		std::cerr << "Msg from BWidgets::Widget::release(): Child " << child->name_ << " doesn't exist." << std::endl;
+		std::cerr << "Msg from BWidgets::Widget::release(): Child " << child->name_ << " is already released." << std::endl;
 	}
 }
 
