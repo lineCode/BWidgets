@@ -312,11 +312,15 @@ void Widget::setBackground (const BStyles::Fill& background)
 
 BStyles::Fill* Widget::getBackground () {return &background_;}
 
+Window* Widget::getMainWindow () const {return main_;}
+
 Widget* Widget::getParent () const {return parent_;}
 
 bool Widget::hasChildren () const {return (children_.size () > 0 ? true : false);}
 
 std::vector<Widget*> Widget::getChildren () const {return children_;}
+
+void Widget::rename (const std::string& name) {name_ = name;}
 
 std::string Widget::getName () const {return name_;}
 

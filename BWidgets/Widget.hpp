@@ -194,6 +194,13 @@ public:
 	BStyles::Fill* getBackground ();
 
 	/**
+	 * Gets a pointer to the widgets main window.
+	 * @return Pointer to the main window. Returns nullptr if the widget
+	 * isn't connected to a main window.
+	 */
+	Window* getMainWindow () const;
+
+	/**
 	 * Gets a pointer to the widgets parent widget.
 	 * @return Pointer to the parent widget. Returns nullptr if the widget
 	 * doesn't have any parents.
@@ -212,6 +219,12 @@ public:
 	 * @return Children vector.
 	 */
 	std::vector<Widget*> getChildren () const;
+
+	/**
+	 * Renames the widget.
+	 * @param name New name
+	 */
+	void rename (const std::string& name);
 
 	/**
 	 * Gets the name of the widget
