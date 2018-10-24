@@ -31,6 +31,9 @@ int main ()
 		{"Frame", {{"background", STYLEPTR (&BStyles::greyFill)},
 				   {"border", STYLEPTR (&frameBorder)}}
 		},
+		{"Surface", {{"background", STYLEPTR (&BStyles::redFill)},
+					 {"border", STYLEPTR (&frameBorder)}}
+		},
 		{"Label", {{"uses", STYLEPTR (&defaultStyles)},
 				   {"textcolors", STYLEPTR (&BColors::blues)},
 				   {"font", STYLEPTR (&defaultFont)}}
@@ -119,7 +122,7 @@ int main ()
 	Button4.applyTheme (defaultTheme);
 
 	// Drawing surface widgets for direct Cairo drawing
-	BWidgets::DrawingSurface Surface = BWidgets::DrawingSurface (20, 340, 320, 60, "Frame");
+	BWidgets::DrawingSurface Surface = BWidgets::DrawingSurface (20, 340, 320, 75, "Surface");
 	Surface.applyTheme (defaultTheme);
 	Surface.getBorder ()->setRadius (0.0);
 	Surface.getBackground ()->getColor ()->setAlpha (0.5);
