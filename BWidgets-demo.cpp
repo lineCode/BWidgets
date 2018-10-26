@@ -96,11 +96,11 @@ int main ()
 	Slider3.applyTheme (defaultTheme);
 	BWidgets::HSlider Slider4 = BWidgets::HSlider (100, 40, 240, 20, "Slider", 80.0, 0.0, 100.0, -0.01);
 	Slider4.applyTheme (defaultTheme);
-	BWidgets::HSliderWithValueDisplay Slider5 = BWidgets::HSliderWithValueDisplay (100, 70, 240, 20, "DialVal",
-																				   80.0, 0.0, 100.0, 0.0, "%4.0f", BWidgets::ON_RIGHT);
+	BWidgets::HSliderWithValueDisplay Slider5 = BWidgets::HSliderWithValueDisplay (100, 60, 240, 40, "DialVal",
+																				   80.0, 0.0, 100.0, 0.0, "%3.1f");
 	Slider5.applyTheme (defaultTheme);
-	BWidgets::VSliderWithValueDisplay Slider6 = BWidgets::VSliderWithValueDisplay (70, 10, 20, 240, "DialVal",
-																					   80.0, 0.0, 100.0, 1.0, "%4.0f", BWidgets::ON_TOP);
+	BWidgets::VSliderWithValueDisplay Slider6 = BWidgets::VSliderWithValueDisplay (60, 10, 40, 240, "DialVal",
+																					   80.0, 0.0, 100.0, 1.0, "%3.1f");
 	Slider6.applyTheme (defaultTheme);
 
 	// Dial widgets
