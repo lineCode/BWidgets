@@ -20,7 +20,8 @@ int main ()
 
 	BStyles::Border frameBorder = {BStyles::whiteLine1pt, 3.0, 3.0, 10.0};
 
-	BStyles::Font defaultFont = BStyles::Font ("Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0);
+	BStyles::Font defaultFont = BStyles::Font ("Sans", CAIRO_FONT_SLANT_NORMAL, CAIRO_FONT_WEIGHT_NORMAL, 12.0,
+											   BStyles::TEXT_ALIGN_CENTER, BStyles::TEXT_VALIGN_MIDDLE);
 
 	// And a theme makes global definition of styles much easier
 	BStyles::Theme defaultTheme = BStyles::Theme ({
@@ -36,6 +37,11 @@ int main ()
 		},
 		{"Label", {{"uses", STYLEPTR (&defaultStyles)},
 				   {"textcolors", STYLEPTR (&BColors::blues)},
+				   {"font", STYLEPTR (&defaultFont)}}
+		},
+		{"Text", {{"uses", STYLEPTR (&defaultStyles)},
+				   {"border", STYLEPTR (&frameBorder)},
+				   {"textcolors", STYLEPTR (&BColors::whites)},
 				   {"font", STYLEPTR (&defaultFont)}}
 		},
 		{"Slider", {{"uses", STYLEPTR (&defaultStyles)},
@@ -54,8 +60,14 @@ int main ()
 		},
 		{"Button", {{"uses", STYLEPTR (&defaultStyles)},
 					{"buttoncolors", STYLEPTR (&BColors::darks)},
+					{"bgcolors", STYLEPTR (&BColors::darks)},
 					{"textcolors", STYLEPTR (&defaultFgColors)},
 					{"font", STYLEPTR (&defaultFont)}}
+		},
+		{"Switch", {{"uses", STYLEPTR (&defaultStyles)},
+					{"buttoncolors", STYLEPTR (&BColors::darks)},
+					{"bgcolors", STYLEPTR (&BColors::darks)},
+					{"labelcolors", STYLEPTR (&defaultFgColors)}}
 		}
 	});
 
@@ -86,6 +98,8 @@ int main ()
 	Label3.applyTheme (defaultTheme, "Label");
 	BWidgets::Label Label4 = BWidgets::Label (10, 10, 240, 16, "This is a too long text and it will be clipped!");
 	Label4.applyTheme (defaultTheme, "Label");
+	BWidgets::Text Text1 (20, 20, 160, 80, "This is a text.\nThis text contains line breaks if the text is too long.");
+	Text1.applyTheme (defaultTheme, "Text");
 
 	// Slider widgets
 	BWidgets::VSlider Slider1 = BWidgets::VSlider (10, 10, 20, 240, "Slider", 80.0, 0.0, 100.0, 0.0);
@@ -152,14 +166,23 @@ int main ()
 	Surface.setClickable (true);
 	Surface.setDragable (true);
 
+	//Switch
+	BWidgets::VSwitch Switch1 (20, 200, 20, 40, "Switch", 0.0);
+	Switch1.applyTheme (defaultTheme);
+	BWidgets::HSwitch Switch2 (60, 210, 40, 20, "Switch", 0.0);
+	Switch2.applyTheme (defaultTheme);
+
 	// Add the background widget container to the main window and add all label
-	// widgets to the background widget container
+	// widgets and switches to the background widget container
 	MainWindow->add (Widget2);
 	Widget2.add (Label1);
 	Widget2.add (Label2);
 	Widget2.add (Label2a);
 	Widget2.add (Label3);
 	Widget2.add (Label4);
+	Widget2.add (Text1);
+	Widget2.add (Switch1);
+	Widget2.add (Switch2);
 
 	// Add the drawing surface widget directly to the main window
 	MainWindow->add (Surface);
