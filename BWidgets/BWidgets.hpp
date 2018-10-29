@@ -7,6 +7,7 @@
 #include "BValues.hpp"
 #include "Widget.hpp"
 #include "Label.hpp"
+#include "Text.hpp"
 #include "ValueWidget.hpp"
 #include "RangeWidget.hpp"
 #include "HSlider.hpp"
@@ -19,6 +20,8 @@
 #include "ToggleButton.hpp"
 #include "TextButton.hpp"
 #include "TextToggleButton.hpp"
+#include "HSwitch.hpp"
+#include "VSwitch.hpp"
 #include "DrawingSurface.hpp"
 
 #endif /*BWIDGETS_HPP_*/
